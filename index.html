@@ -10,10 +10,10 @@
 
     <style>
         /* नेपाल प्रहरीको रङ थीम:
-           Navy Blue: #001f3f
-           Crimson Red: #c8102e / #a60c26
-           Gold/Accent: #d4af37
-           Light Gray Bg: #f4f6f9
+            Navy Blue: #001f3f
+            Crimson Red: #c8102e / #a60c26
+            Gold/Accent: #d4af37
+            Light Gray Bg: #f4f6f9
         */
 
         body {
@@ -584,6 +584,9 @@
             renderUI();
 
             document.getElementById('successMessage').style.display = 'block';
+
+            // फारम सबमिट गर्दा नै सीधै प्रिन्ट र QR कोड देखाउने
+            printPassData(code, rankName, date, time, returnDate, destination);
 
             document.getElementById('gateForm').reset();
             document.getElementById('nepaliDate').value = "२०८३ साल श्रावण १५ गते";
