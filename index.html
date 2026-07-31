@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>गेट पास प्रणाली - महाराजगंज</title>
+    
+    <!-- Dynamic QR Code जेनेरेट गर्नको लागि QRCode.js लाइब्रेरी -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <style>
         /* नेपाल प्रहरीको रङ थीम:
            Navy Blue: #001f3f
@@ -215,6 +219,14 @@
             display: none;
         }
 
+        /* QR कोड राख्ने स्थानको स्टाइल */
+        .qrcode-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+        }
+
         @media print {
             body * {
                 visibility: hidden;
@@ -258,7 +270,7 @@
             }
             .pass-details {
                 width: 100%;
-                margin-bottom: 20px;
+                margin-bottom: 15px;
             }
             .pass-details td {
                 border: none;
@@ -273,7 +285,7 @@
                 color: #001f3f;
             }
             .signature-box-container {
-                margin-top: 40px;
+                margin-top: 30px;
                 display: flex;
                 justify-content: space-between;
             }
@@ -447,6 +459,11 @@
                 </tr>
             </table>
 
+            <!-- Dynamic QR Code देखिने ठाउँ -->
+            <div class="qrcode-container">
+                <div id="qrcode"></div>
+            </div>
+
             <div class="signature-box-container">
                 <div class="signature-box">
                     कर्मचारीको दस्तखत
@@ -527,7 +544,25 @@
             document.getElementById('p_returnDate').innerText = returnDate || 'तोकिएको छैन';
             document.getElementById('p_destination').innerText = destination;
 
-            window.print();
+            // QR कोड जेनेरेट गर्ने प्रक्रिया
+            const qrcodeContainer = document.getElementById('qrcode');
+            qrcodeContainer.innerHTML = ''; // पुरानो QR हटाउने
+
+            const qrText = `गेट पास विवरण:\nकोड: ${code}\nनाम: ${rankName}\nमिति: ${date}\nप्रस्थान: ${time}\nफर्कने: ${returnDate}\nस्थान/कारण: ${destination}`;
+
+            new QRCode(qrcodeContainer, {
+                text: qrText,
+                width: 110,
+                height: 110,
+                colorDark : "#001f3f",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            // QR कोड तयार भइसकेपछि मात्र प्रिन्ट विन्डो खोल्ने
+            setTimeout(() => {
+                window.print();
+            }, 300);
         }
 
         function handleSubmit(event) {
