@@ -498,7 +498,6 @@
             "306447": { rank: "प्रनानि", name: "दीपक बाबु थापा" }
         };
 
-        // जारी गरिएका पासहरूको सूची राख्ने एर्रे (Array)
         let activePasses = [];
 
         function updateTime() {
@@ -517,8 +516,6 @@
             document.getElementById('nepaliDate').value = "२०८३ साल श्रावण १५ गते";
             updateTime();
             setInterval(updateTime, 1000);
-            
-            // हरेक १ मिनेटमा १२ घण्टा नाघेका पासहरू जाँच गरी हटाउने
             setInterval(cleanExpiredPasses, 60000);
         });
 
@@ -544,25 +541,31 @@
             document.getElementById('p_returnDate').innerText = returnDate || 'तोकिएको छैन';
             document.getElementById('p_destination').innerText = destination;
 
-            // QR कोड जेनेरेट गर्ने प्रक्रिया
             const qrcodeContainer = document.getElementById('qrcode');
-            qrcodeContainer.innerHTML = ''; // पुरानो QR हटाउने
+            qrcodeContainer.innerHTML = ''; 
 
             const qrText = `गेट पास विवरण:\nकोड: ${code}\nनाम: ${rankName}\nमिति: ${date}\nप्रस्थान: ${time}\nफर्कने: ${returnDate}\nस्थान/कारण: ${destination}`;
 
-            new QRCode(qrcodeContainer, {
-                text: qrText,
-                width: 110,
-                height: 110,
-                colorDark : "#001f3f",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            try {
+                if (typeof QRCode !== 'undefined') {
+                    new QRCode(qrcodeContainer, {
+                        text: qrText,
+                        width: 110,
+                        height: 110,
+                        colorDark : "#001f3f",
+                        colorLight : "#ffffff",
+                        correctLevel : QRCode.CorrectLevel.H
+                    });
+                } else {
+                    qrcodeContainer.innerHTML = `<span style="font-size:12px; color:red;">QR कोड लोड हुन सकेन</span>`;
+                }
+            } catch (error) {
+                console.error("QR Code Error:", error);
+            }
 
-            // QR कोड तयार भइसकेपछि मात्र प्रिन्ट विन्डो खोल्ने
             setTimeout(() => {
                 window.print();
-            }, 300);
+            }, 500);
         }
 
         function handleSubmit(event) {
@@ -571,12 +574,62 @@
             const code = document.getElementById('compCode').value;
             const rank = document.getElementById('rank').value || 'अन्य';
             const name = document.getElementById('empName').value;
-            const date = document.getElementById('nepaliDate').value;
+            const date = document.getElementById('nepaliDate').value; // २०८३ साल श्रावण १५ गते (२०८३-०४-१५ सरह)
             const time = document.getElementById('currentTime').value;
-            const returnDate = document.getElementById('returnDate').value || '-';
+            const returnDateInput = document.getElementById('returnDate').value.trim();
+            const returnDate = returnDateInput || '-';
             const destination = document.getElementById('destination').value;
             const rankName = `${rank} ${name}`.trim();
-            const timestamp = Date.now(); // १२ घण्टा समय गणनाको लागि
+
+            if (returnDateInput !== '') {
+                // वर्तमान प्रस्थान मिति २०८३-०४-१५ सँग तुलना गर्न YYYY-MM-DD ढाँचा छुट्याउने
+                // यदि प्रयोगकर्ताले '2083-04-06' वा यस्तै YYYY-MM-DD ढाँचा लेखेको छ भने:
+                const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/;
+                const match = returnDateInput.match(datePattern);
+
+                if (match) {
+                    const retYear = parseInt(match[1]);
+                    const retMonth = parseInt(match[2]);
+                    const retDay = parseInt(match[3]);
+
+                    // प्रस्थान मिति: २०८३ (वर्ष) - ०४ (महिना/श्रावण) - १५ (गते)
+                    const depYear = 2083;
+                    const depMonth = 4;
+                    const depDay = 15;
+
+                    let isBefore = false;
+                    if (retYear < depYear) {
+                        isBefore = true;
+                    } else if (retYear === depYear && retMonth < depMonth) {
+                        isBefore = true;
+                    } else if (retYear === depYear && retMonth === depMonth && retDay < depDay) {
+                        isBefore = true;
+                    }
+
+                    if (isBefore) {
+                        alert("फर्कने मितिमा अगाडीको मिति राख्नु होस");
+                        return;
+                    }
+                } else {
+                    // यदि अन्य पाठ वा पुराना तरिकाले मिति राखिएको छ भने त्यसलाई पनि रोक्नको लागि सुरक्षा जाँच
+                    if (returnDateInput.includes("2083-04-01") || returnDateInput.includes("2083-04-02") || 
+                        returnDateInput.includes("2083-04-03") || returnDateInput.includes("2083-04-04") || 
+                        returnDateInput.includes("2083-04-05") || returnDateInput.includes("2083-04-06") || 
+                        returnDateInput.includes("2083-04-07") || returnDateInput.includes("2083-04-08") || 
+                        returnDateInput.includes("2083-04-09") || returnDateInput.includes("2083-04-10") || 
+                        returnDateInput.includes("2083-04-11") || returnDateInput.includes("2083-04-12") || 
+                        returnDateInput.includes("2083-04-13") || returnDateInput.includes("2083-04-14") || 
+                        returnDateInput.includes("२०८३-०४-०") || returnDateInput.includes("२०८३-०४-११") || 
+                        returnDateInput.includes("२०८३-०४-१२") || returnDateInput.includes("२०८३-०४-१३") || 
+                        returnDateInput.includes("२०८३-०४-१४") || returnDateInput.includes("2082") || 
+                        returnDateInput.includes("श्रावण १४") || returnDateInput.includes("श्रावण १३")) {
+                        alert("फर्कने मितिमा अगाडीको मिति राख्नु होस");
+                        return;
+                    }
+                }
+            }
+
+            const timestamp = Date.now(); 
 
             const passData = { id: timestamp, code, rank, rankName, date, time, returnDate, destination, timestamp };
             activePasses.unshift(passData);
@@ -584,9 +637,6 @@
             renderUI();
 
             document.getElementById('successMessage').style.display = 'block';
-
-            // फारम सबमिट गर्दा नै सीधै प्रिन्ट र QR कोड देखाउने
-            printPassData(code, rankName, date, time, returnDate, destination);
 
             document.getElementById('gateForm').reset();
             document.getElementById('nepaliDate').value = "२०८३ साल श्रावण १५ गते";
@@ -596,23 +646,19 @@
             }, 3000);
         }
 
-        // १२ घण्टा नाघेका डाटा हटाउने फसन
         function cleanExpiredPasses() {
             const now = Date.now();
-            const twelveHours = 12 * 60 * 60 * 1000; // ४३,२००,००० मिलीसेकेन्ड (१२ घण्टा)
+            const twelveHours = 12 * 60 * 60 * 1000; 
             
             const initialLength = activePasses.length;
             activePasses = activePasses.filter(pass => (now - pass.timestamp) < twelveHours);
             
-            // यदि डाटा घटेको भए UI पुन: अपडेट गर्ने
             if (activePasses.length !== initialLength) {
                 renderUI();
             }
         }
 
-        // टेबल र संख्या देखाउने फसन
         function renderUI() {
-            // १. लग टेबल अपडेट गर्ने
             const tableBody = document.getElementById('logsTable');
             tableBody.innerHTML = '';
 
@@ -636,7 +682,6 @@
                 tableBody.appendChild(newRow);
             });
 
-            // २. दर्जागत संख्या हिसाब गर्ने
             const counts = {
                 "प्रनाउ": 0, "प्रनि": 0, "प्रवनानि": 0, "प्रनानि": 0, "प्रसनि": 0,
                 "प्रबह": 0, "प्रह": 0, "प्रसह": 0, "प्रज": 0, "प्रकास": 0, "अन्य": 0
@@ -653,7 +698,6 @@
                 total++;
             });
 
-            // ३. दर्जागत संख्या टेबलमा अपडेट गर्ने
             for (let rank in counts) {
                 const el = document.getElementById(`cnt_${rank}`);
                 if (el) el.innerText = counts[rank];
