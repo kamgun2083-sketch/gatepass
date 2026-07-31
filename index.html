@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>गेट पास प्रणाली - महाराजगंज</title>
+    <style>
+        /* नेपाल प्रहरीको रङ थीम:
+           Navy Blue: #001f3f
+           Crimson Red: #c8102e / #a60c26
+           Gold/Accent: #d4af37
+           Light Gray Bg: #f4f6f9
+        */
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 0 0 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 31, 63, 0.15);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+            position: relative;
+            border-top: 5px solid #c8102e;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background-color: #001f3f;
+            padding: 15px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-header h2 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .form-header h3 {
+            color: #d4af37;
+            font-size: 15px;
+            margin: 6px 0 0 0;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        form {
+            padding: 0 25px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            color: #001f3f;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #b0bec5;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: #001f3f;
+            outline: none;
+        }
+
+        .auto-fill {
+            background-color: #e9ecef;
+            color: #1a252f;
+            font-weight: bold;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 60px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: #001f3f;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .btn-submit:hover {
+            background-color: #001124;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.99);
+        }
+
+        .success-msg {
+            display: none;
+            margin: 15px 25px 0 25px;
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* टेबलको लागि स्टाइल */
+        .logs-container {
+            width: 100%;
+            max-width: 850px;
+            margin-top: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 31, 63, 0.1);
+            box-sizing: border-box;
+            border-top: 4px solid #001f3f;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #cfd8dc;
+            padding: 8px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #001f3f;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .action-btn {
+            padding: 6px 14px;
+            background-color: #c8102e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #960b22;
+        }
+
+        /* दर्जागत संख्या टेबलको स्टाइल */
+        .summary-table th {
+            background-color: #c8102e;
+            color: white;
+            font-size: 12px;
+        }
+        .summary-table td {
+            font-weight: bold;
+            color: #001f3f;
+            font-size: 13px;
+        }
+
+        /* फुटर स्टाइल */
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #001f3f;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* प्रिन्टको लागि विशेष डिजाइन (Print Pass Card) */
+        #printablePass {
+            display: none;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printablePass, #printablePass * {
+                visibility: visible;
+            }
+            #printablePass {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+            .pass-ticket {
+                border: 3px double #001f3f;
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 500px;
+                margin: 0 auto;
+                background: #fff;
+                box-sizing: border-box;
+            }
+            .pass-header {
+                text-align: center;
+                border-bottom: 2px solid #c8102e;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+            .pass-header h2 {
+                margin: 0;
+                font-size: 18px;
+                color: #001f3f;
+            }
+            .pass-header h3 {
+                margin: 5px 0 0 0;
+                font-size: 14px;
+                color: #c8102e;
+            }
+            .pass-details {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            .pass-details td {
+                border: none;
+                border-bottom: 1px solid #eee;
+                padding: 6px 4px;
+                font-size: 14px;
+                text-align: left;
+            }
+            .pass-details td.label {
+                font-weight: bold;
+                width: 40%;
+                color: #001f3f;
+            }
+            .signature-box-container {
+                margin-top: 40px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .signature-box {
+                text-align: center;
+                border-top: 1px dashed #001f3f;
+                width: 150px;
+                padding-top: 5px;
+                font-size: 12px;
+                color: #001f3f;
+                font-weight: bold;
+            }
+            .designer-credit {
+                font-size: 11px;
+                color: #555;
+                text-align: center;
+                margin-top: 20px;
+                border-top: 1px solid #ddd;
+                padding-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <div class="form-header">
+            <h2>काठमाडौं उपत्यका प्रहरी, सशस्त्र प्रहरी गण नं. २ महाराजगंज</h2>
+            <h3>गेट पास दर्ता फारम</h3>
+        </div>
+
+        <form id="gateForm" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="compCode">कम्प्युटर कोड (Computer Code):</label>
+                <input type="text" id="compCode" required placeholder="जस्तै: 34468" oninput="getEmployeeDetails()">
+            </div>
+
+            <div class="form-group">
+                <label for="rank">दर्जा (Rank):</label>
+                <input type="text" id="rank" class="auto-fill" readonly placeholder="स्वयं आउनेछ">
+            </div>
+
+            <div class="form-group">
+                <label for="empName">नाम, थर (Full Name):</label>
+                <input type="text" id="empName" class="auto-fill" readonly placeholder="स्वयं आउनेछ">
+            </div>
+
+            <div class="form-group">
+                <label for="nepaliDate">मिति (Nepali Date):</label>
+                <input type="text" id="nepaliDate" class="auto-fill" required readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="currentTime">प्रस्थान समय (Departure Time):</label>
+                <input type="text" id="currentTime" class="auto-fill" required readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="returnDate">फर्कने मिति र समय (Expected Return Date & Time):</label>
+                <input type="text" id="returnDate" placeholder="जस्तै: २०८३-०५-०१ अपराह्न ०५:०० वा मिति/समय">
+            </div>
+
+            <div class="form-group">
+                <label for="destination">जाने स्थान र कारण (Destination & Purpose):</label>
+                <textarea id="destination" required placeholder="कार्यालय बाहिर जाने स्थान र कारण खुलाउनुहोस्"></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">सबमिट गर्नुहोस् (Submit)</button>
+        </form>
+
+        <div id="successMessage" class="success-msg">
+            विवरण सफलतापूर्वक दर्ता भयो!
+        </div>
+    </div>
+
+    <!-- दर्जागत संख्या समरी टेबल -->
+    <div class="logs-container" style="border-top: 4px solid #c8102e;">
+        <h3 style="margin-top:0; color:#001f3f;">दर्जागत संख्या विवरण</h3>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>प्रनाउ</th>
+                    <th>प्रनि</th>
+                    <th>प्रवनानि</th>
+                    <th>प्रनानि</th>
+                    <th>प्रसनि</th>
+                    <th>प्रबह</th>
+                    <th>प्रह</th>
+                    <th>प्रसह</th>
+                    <th>प्रज</th>
+                    <th>प्रकास</th>
+                    <th>अन्य</th>
+                    <th>जम्मा</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="cnt_प्रनाउ">0</td>
+                    <td id="cnt_प्रनि">0</td>
+                    <td id="cnt_प्रवनानि">0</td>
+                    <td id="cnt_प्रनानि">0</td>
+                    <td id="cnt_प्रसनि">0</td>
+                    <td id="cnt_प्रबह">0</td>
+                    <td id="cnt_प्रह">0</td>
+                    <td id="cnt_प्रसह">0</td>
+                    <td id="cnt_प्रज">0</td>
+                    <td id="cnt_प्रकास">0</td>
+                    <td id="cnt_अन्य">0</td>
+                    <td id="cnt_total" style="background-color: #001f3f; color: white;">0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- दर्ता भएका पासहरूको सूची -->
+    <div class="logs-container">
+        <h3 style="margin-top:0; color:#001f3f;">हालै जारी गरिएका गेट पासहरू</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>कोड</th>
+                    <th>दर्जा / नाम</th>
+                    <th>प्रस्थान समय</th>
+                    <th>फर्कने मिति/समय</th>
+                    <th>स्थान / कारण</th>
+                    <th>कार्य</th>
+                </tr>
+            </thead>
+            <tbody id="logsTable">
+                <!-- यहाँ डाटा स्वतः थपिनेछ -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- फुटर क्रिडिट -->
+    <footer>
+        Designed by बैकुण्ठ सुवेदी
+    </footer>
+
+    <!-- प्रिन्ट हुने गेट पास स्लिप -->
+    <div id="printablePass">
+        <div class="pass-ticket">
+            <div class="pass-header">
+                <h2>काठमाडौं उपत्यका प्रहरी</h2>
+                <h3>सशस्त्र प्रहरी गण नं. २ महाराजगंज - गेट पास</h3>
+            </div>
+            <table class="pass-details">
+                <tr>
+                    <td class="label">कम्प्युटर कोड:</td>
+                    <td id="p_compCode"></td>
+                </tr>
+                <tr>
+                    <td class="label">दर्जा / नाम:</td>
+                    <td id="p_empName"></td>
+                </tr>
+                <tr>
+                    <td class="label">मिति:</td>
+                    <td id="p_nepaliDate"></td>
+                </tr>
+                <tr>
+                    <td class="label">प्रस्थान समय:</td>
+                    <td id="p_currentTime"></td>
+                </tr>
+                <tr>
+                    <td class="label">फर्कने मिति/समय:</td>
+                    <td id="p_returnDate"></td>
+                </tr>
+                <tr>
+                    <td class="label">जाने स्थान / कारण:</td>
+                    <td id="p_destination"></td>
+                </tr>
+            </table>
+
+            <div class="signature-box-container">
+                <div class="signature-box">
+                    कर्मचारीको दस्तखत
+                </div>
+                <div class="signature-box">
+                    प्रमाणित गर्नेको दस्तखत
+                </div>
+            </div>
+
+            <div class="designer-credit">
+                Designed by बैकुण्ठ सुवेदी
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const employeeDatabase = {
+            "33223": { rank: "प्रउ", name: "तिलक भारती" },
+            "34468": { rank: "प्रनाउ", name: "खगेन्द्र बहादुर खड्का" },
+            "313397": { rank: "प्रनि", name: "छे फिन्जो भोटे" },
+            "313249": { rank: "प्रनि", name: "जनक राज ढुंगाना" },
+            "363519": { rank: "प्रनि", name: "केशव राज भट्ट" },
+            "472445": { rank: "प्रनि", name: "अविनाश दीप जि.सी." },
+            "125879": { rank: "प्रवनानि", name: "दिलीप कुमार श्रेष्ठ" },
+            "125724": { rank: "प्रवनानि", name: "दिनेश थापा" },
+            "350396": { rank: "प्रवनानि", name: "भिमसेन पोखरेल" },
+            "22577": { rank: "प्रवनानि", name: "समिर कुमार विष्ट" },
+            "125522": { rank: "प्रवनानि", name: "अनुप राउत" },
+            "125278": { rank: "प्रवनानि", name: "गोकर्ण थापा" },
+            "361305": { rank: "प्रनानि", name: "सरस्वती टण्डन" },
+            "312371": { rank: "प्रनानि", name: "ईश्वर कुमार महर्जन" },
+            "306447": { rank: "प्रनानि", name: "दीपक बाबु थापा" }
+        };
+
+        // जारी गरिएका पासहरूको सूची राख्ने एर्रे (Array)
+        let activePasses = [];
+
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'अपराह्न (PM)' : 'पूर्वाह्न (AM)';
+            hours = hours % 12 || 12;
+            
+            const formattedTime = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('currentTime').value = formattedTime;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('nepaliDate').value = "२०८३ साल श्रावण १५ गते";
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // हरेक १ मिनेटमा १२ घण्टा नाघेका पासहरू जाँच गरी हटाउने
+            setInterval(cleanExpiredPasses, 60000);
+        });
+
+        function getEmployeeDetails() {
+            const code = document.getElementById('compCode').value.trim();
+            const rankField = document.getElementById('rank');
+            const nameField = document.getElementById('empName');
+
+            if (employeeDatabase[code]) {
+                rankField.value = employeeDatabase[code].rank;
+                nameField.value = employeeDatabase[code].name;
+            } else {
+                rankField.value = "";
+                nameField.value = "";
+            }
+        }
+
+        function printPassData(code, rankName, date, time, returnDate, destination) {
+            document.getElementById('p_compCode').innerText = code;
+            document.getElementById('p_empName').innerText = rankName;
+            document.getElementById('p_nepaliDate').innerText = date;
+            document.getElementById('p_currentTime').innerText = time;
+            document.getElementById('p_returnDate').innerText = returnDate || 'तोकिएको छैन';
+            document.getElementById('p_destination').innerText = destination;
+
+            window.print();
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            const code = document.getElementById('compCode').value;
+            const rank = document.getElementById('rank').value || 'अन्य';
+            const name = document.getElementById('empName').value;
+            const date = document.getElementById('nepaliDate').value;
+            const time = document.getElementById('currentTime').value;
+            const returnDate = document.getElementById('returnDate').value || '-';
+            const destination = document.getElementById('destination').value;
+            const rankName = `${rank} ${name}`.trim();
+            const timestamp = Date.now(); // १२ घण्टा समय गणनाको लागि
+
+            const passData = { id: timestamp, code, rank, rankName, date, time, returnDate, destination, timestamp };
+            activePasses.unshift(passData);
+
+            renderUI();
+
+            document.getElementById('successMessage').style.display = 'block';
+
+            document.getElementById('gateForm').reset();
+            document.getElementById('nepaliDate').value = "२०८३ साल श्रावण १५ गते";
+            
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 3000);
+        }
+
+        // १२ घण्टा नाघेका डाटा हटाउने फसन
+        function cleanExpiredPasses() {
+            const now = Date.now();
+            const twelveHours = 12 * 60 * 60 * 1000; // ४३,२००,००० मिलीसेकेन्ड (१२ घण्टा)
+            
+            const initialLength = activePasses.length;
+            activePasses = activePasses.filter(pass => (now - pass.timestamp) < twelveHours);
+            
+            // यदि डाटा घटेको भए UI पुन: अपडेट गर्ने
+            if (activePasses.length !== initialLength) {
+                renderUI();
+            }
+        }
+
+        // टेबल र संख्या देखाउने फसन
+        function renderUI() {
+            // १. लग टेबल अपडेट गर्ने
+            const tableBody = document.getElementById('logsTable');
+            tableBody.innerHTML = '';
+
+            activePasses.forEach(pass => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${pass.code}</td>
+                    <td>${pass.rankName}</td>
+                    <td>${pass.time}</td>
+                    <td>${pass.returnDate}</td>
+                    <td>${pass.destination}</td>
+                    <td>
+                        <button class="action-btn">प्रिन्ट</button>
+                    </td>
+                `;
+
+                newRow.querySelector('.action-btn').addEventListener('click', () => {
+                    printPassData(pass.code, pass.rankName, pass.date, pass.time, pass.returnDate, pass.destination);
+                });
+
+                tableBody.appendChild(newRow);
+            });
+
+            // २. दर्जागत संख्या हिसाब गर्ने
+            const counts = {
+                "प्रनाउ": 0, "प्रनि": 0, "प्रवनानि": 0, "प्रनानि": 0, "प्रसनि": 0,
+                "प्रबह": 0, "प्रह": 0, "प्रसह": 0, "प्रज": 0, "प्रकास": 0, "अन्य": 0
+            };
+
+            let total = 0;
+
+            activePasses.forEach(pass => {
+                if (counts.hasOwnProperty(pass.rank)) {
+                    counts[pass.rank]++;
+                } else {
+                    counts["अन्य"]++;
+                }
+                total++;
+            });
+
+            // ३. दर्जागत संख्या टेबलमा अपडेट गर्ने
+            for (let rank in counts) {
+                const el = document.getElementById(`cnt_${rank}`);
+                if (el) el.innerText = counts[rank];
+            }
+            document.getElementById('cnt_total').innerText = total;
+        }
+    </script>
+</body>
+</html>
