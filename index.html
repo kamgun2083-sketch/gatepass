@@ -3,19 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>गेट पास प्रणाली - महाराजगंज</title>
+    <title>डिजिटल गेट पास प्रणाली - महाराजगंज</title>
     
-    <!-- Dynamic QR Code जेनेरेट गर्नको लागि QRCode.js लाइब्रेरी -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
     <style>
-        /* नेपाल प्रहरीको रङ थीम:
-            Navy Blue: #001f3f
-            Crimson Red: #c8102e / #a60c26
-            Gold/Accent: #d4af37
-            Light Gray Bg: #f4f6f9
-        */
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f9;
@@ -124,10 +114,6 @@
             background-color: #001124;
         }
 
-        .btn-submit:active {
-            transform: scale(0.99);
-        }
-
         .success-msg {
             display: none;
             margin: 15px 25px 0 25px;
@@ -140,10 +126,9 @@
             font-weight: bold;
         }
 
-        /* टेबलको लागि स्टाइल */
         .logs-container {
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             margin-top: 30px;
             background: white;
             padding: 20px;
@@ -153,10 +138,17 @@
             border-top: 4px solid #001f3f;
         }
 
+        .batch-print-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         th, td {
@@ -192,7 +184,21 @@
             background-color: #960b22;
         }
 
-        /* दर्जागत संख्या टेबलको स्टाइल */
+        .batch-btn {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .batch-btn:hover {
+            background-color: #218838;
+        }
+
         .summary-table th {
             background-color: #c8102e;
             color: white;
@@ -204,7 +210,6 @@
             font-size: 13px;
         }
 
-        /* फुटर स्टाइल */
         footer {
             margin-top: 30px;
             text-align: center;
@@ -214,19 +219,11 @@
             letter-spacing: 0.5px;
         }
 
-        /* प्रिन्टको लागि विशेष डिजाइन (Print Pass Card) */
         #printablePass {
             display: none;
         }
 
-        /* QR कोड राख्ने स्थानको स्टाइल */
-        .qrcode-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 15px 0;
-        }
-
+        /* प्रिन्टको लागि A4 साइजमा एउटै पानामा ६ वटा पास ग्रिड लेआउट (२ स्तम्भ र ३ लहर) */
         @media print {
             body * {
                 visibility: hidden;
@@ -239,72 +236,86 @@
                 position: absolute;
                 left: 0;
                 top: 0;
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                padding: 4mm;
+                box-sizing: border-box;
+            }
+            .print-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: repeat(3, 1fr);
+                gap: 5mm;
                 width: 100%;
-                padding: 20px;
+                height: 100%;
                 box-sizing: border-box;
             }
             .pass-ticket {
-                border: 3px double #001f3f;
-                padding: 20px;
-                border-radius: 8px;
-                max-width: 500px;
-                margin: 0 auto;
+                border: 1px solid #001f3f;
+                padding: 6px 8px;
+                border-radius: 3px;
                 background: #fff;
                 box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
+                overflow: hidden;
             }
             .pass-header {
                 text-align: center;
-                border-bottom: 2px solid #c8102e;
-                padding-bottom: 10px;
-                margin-bottom: 15px;
+                border-bottom: 1px solid #c8102e;
+                padding-bottom: 2px;
+                margin-bottom: 3px;
             }
             .pass-header h2 {
                 margin: 0;
-                font-size: 18px;
+                font-size: 11px;
                 color: #001f3f;
             }
             .pass-header h3 {
-                margin: 5px 0 0 0;
-                font-size: 14px;
+                margin: 1px 0 0 0;
+                font-size: 9px;
                 color: #c8102e;
             }
             .pass-details {
                 width: 100%;
-                margin-bottom: 15px;
+                margin-bottom: 2px;
             }
             .pass-details td {
                 border: none;
-                border-bottom: 1px solid #eee;
-                padding: 6px 4px;
-                font-size: 14px;
+                border-bottom: 0.5px solid #eee;
+                padding: 2px 2px;
+                font-size: 9.5px;
                 text-align: left;
             }
             .pass-details td.label {
                 font-weight: bold;
-                width: 40%;
+                width: 42%;
                 color: #001f3f;
             }
             .signature-box-container {
-                margin-top: 30px;
+                margin-top: 4px;
                 display: flex;
                 justify-content: space-between;
             }
             .signature-box {
                 text-align: center;
                 border-top: 1px dashed #001f3f;
-                width: 150px;
-                padding-top: 5px;
-                font-size: 12px;
+                width: 90px;
+                padding-top: 1px;
+                font-size: 8.5px;
                 color: #001f3f;
                 font-weight: bold;
             }
             .designer-credit {
-                font-size: 11px;
+                font-size: 8px;
                 color: #555;
                 text-align: center;
-                margin-top: 20px;
-                border-top: 1px solid #ddd;
-                padding-top: 5px;
+                margin-top: 2px;
+                border-top: 0.5px solid #ddd;
+                padding-top: 1px;
             }
         }
     </style>
@@ -314,7 +325,7 @@
     <div class="form-container">
         <div class="form-header">
             <h2>काठमाडौं उपत्यका प्रहरी, सशस्त्र प्रहरी गण नं. २ महाराजगंज</h2>
-            <h3>गेट पास दर्ता फारम</h3>
+            <h3>डिजिटल गेट पास प्रणाली</h3>
         </div>
 
         <form id="gateForm" onsubmit="handleSubmit(event)">
@@ -402,10 +413,14 @@
 
     <!-- दर्ता भएका पासहरूको सूची -->
     <div class="logs-container">
-        <h3 style="margin-top:0; color:#001f3f;">हालै जारी गरिएका गेट पासहरू</h3>
+        <div class="batch-print-bar">
+            <h3 style="margin:0; color:#001f3f;">हालै जारी गरिएका गेट पासहरू</h3>
+            <button class="batch-btn" onclick="printSelectedPasses()">छानिएका (अधिकतम ६ वटा) प्रिन्ट गर्नुहोस्</button>
+        </div>
         <table>
             <thead>
                 <tr>
+                    <th style="width: 40px;">छान्नुहोस्</th>
                     <th>कोड</th>
                     <th>दर्जा / नाम</th>
                     <th>प्रस्थान समय</th>
@@ -425,63 +440,44 @@
         Designed by बैकुण्ठ सुवेदी
     </footer>
 
-    <!-- प्रिन्ट हुने गेट पास स्लिप -->
+    <!-- प्रिन्ट हुने गेट पास स्लिप (A4 मा ६ वटा छुट्टाछुट्टै पास अट्ने संरचना) -->
     <div id="printablePass">
-        <div class="pass-ticket">
-            <div class="pass-header">
-                <h2>काठमाडौं उपत्यका प्रहरी</h2>
-                <h3>सशस्त्र प्रहरी गण नं. २ महाराजगंज - गेट पास</h3>
-            </div>
-            <table class="pass-details">
-                <tr>
-                    <td class="label">कम्प्युटर कोड:</td>
-                    <td id="p_compCode"></td>
-                </tr>
-                <tr>
-                    <td class="label">दर्जा / नाम:</td>
-                    <td id="p_empName"></td>
-                </tr>
-                <tr>
-                    <td class="label">मिति:</td>
-                    <td id="p_nepaliDate"></td>
-                </tr>
-                <tr>
-                    <td class="label">प्रस्थान समय:</td>
-                    <td id="p_currentTime"></td>
-                </tr>
-                <tr>
-                    <td class="label">फर्कने मिति/समय:</td>
-                    <td id="p_returnDate"></td>
-                </tr>
-                <tr>
-                    <td class="label">जाने स्थान / कारण:</td>
-                    <td id="p_destination"></td>
-                </tr>
-            </table>
-
-            <!-- Dynamic QR Code देखिने ठाउँ -->
-            <div class="qrcode-container">
-                <div id="qrcode"></div>
-            </div>
-
-            <div class="signature-box-container">
-                <div class="signature-box">
-                    कर्मचारीको दस्तखत
-                </div>
-                <div class="signature-box">
-                    प्रमाणित गर्नेको दस्तखत
-                </div>
-            </div>
-
-            <div class="designer-credit">
-                Designed by बैकुण्ठ सुवेदी
-            </div>
+        <div class="print-grid">
+            <script>
+                for (let i = 1; i <= 6; i++) {
+                    document.write(`
+                        <div class="pass-ticket">
+                            <div>
+                                <div class="pass-header">
+                                    <h2>काठमाडौं उपत्यका प्रहरी</h2>
+                                    <h3>सशस्त्र प्रहरी गण नं. २ महाराजगंज - डिजिटल गेट पास</h3>
+                                </div>
+                                <table class="pass-details">
+                                    <tr><td class="label">कम्प्युटर कोड:</td><td id="p_compCode_${i}"></td></tr>
+                                    <tr><td class="label">दर्जा / नाम:</td><td id="p_empName_${i}"></td></tr>
+                                    <tr><td class="label">मिति:</td><td id="p_nepaliDate_${i}"></td></tr>
+                                    <tr><td class="label">प्रस्थान समय:</td><td id="p_currentTime_${i}"></td></tr>
+                                    <tr><td class="label">फर्कने मिति/समय:</td><td id="p_returnDate_${i}"></td></tr>
+                                    <tr><td class="label">जाने स्थान / कारण:</td><td id="p_destination_${i}"></td></tr>
+                                </table>
+                            </div>
+                            <div>
+                                <div class="signature-box-container">
+                                    <div class="signature-box">कर्मचारीको दस्तखत</div>
+                                    <div class="signature-box">प्रमाणित गर्नेको दस्तखत</div>
+                                </div>
+                                <div class="designer-credit">Designed by बैकुण्ठ सुवेदी</div>
+                            </div>
+                        </div>
+                    `);
+                }
+            </script>
         </div>
     </div>
 
     <script>
         const employeeDatabase = {
-            "33223": { rank: "प्रउ", name: "तिलक भारती" },
+           "33223": { rank: "प्रउ", name: "तिलक भारती" },
     "34468": { rank: "प्रनाउ", name: "खगेन्द्र बहादुर खड्का" },
     "313397": { rank: "प्रनि", name: "छे फिन्जो भोटे" },
     "313249": { rank: "प्रनि", name: "जनक राज ढुंगाना" },
@@ -528,9 +524,7 @@
     "366117": { rank: "प्रवह", name: "झषनाथ पोखेल" },
     "392552": { rank: "प्रवह", name: "दमेन्ती बुढाथोकी" },
     "378154": { rank: "प्रवह", name: "बैजनाथ भोर" },
-    "360130": { rank: "प्रवह", name: "राजाराम कार्की" },
-    "361942": { rank: "प्रवह", name: "दिपेन्द्र राना" }, 
-    "362009": { rank: "प्रवह", name: "पवित्रा थापा" },
+    "360130": { rank: "प्रवह", name: "राजाराम कार्की" },   
     "391497": { rank: "प्रह", name: "सुन्तली थामी" },
     "380507": { rank: "प्रह", name: "बद्री प्रसाद धिताल" },
     "362621": { rank: "प्रह", name: "फिपरानी लिम्बू" },
@@ -614,7 +608,7 @@
     "422357": { rank: "प्रसह", name: "झलक बहादुर बुढा" },
     "409340": { rank: "प्रसह", name: "उमेश कुमार मण्डल" },
     "412999": { rank: "प्रसह", name: "नरेन्द्र सिंह धामी" },
-    "411991": { rank: "प्रसह", name: "हरि बहादुर खप्तरी" },
+    "411991": { rank: "प्रसह", name: "हरि वहादुर खत्री" },
     "421072": { rank: "प्रसह", name: "कमल खड्का" },
     "400549": { rank: "प्रसह", name: "रोशनी खड्गी" },
     "409128": { rank: "प्रसह", name: "नन्दराज श्रेष्ठ" },
@@ -796,8 +790,6 @@
     "487727": { rank: "प्रज", name: "अमर बहादुर राना मगर" },
     "490877": { rank: "प्रज", name: "श्रवण पण्डित" },
     "468377": { rank: "प्रज", name: "तोयराज भट्ट" },
-    "494722": { rank: "प्रज", name: "अलिमुन निशा" },
-    "484390": { rank: "प्रज", name: "पवन कुमार वली" },
     "550410": { rank: "प्रकास", name: "राम बहादुर तामाङ" },
     "550389": { rank: "प्रकास", name: "सुमन कार्की" },
     "552234": { rank: "प्रकास", name: "मनेश मालमुल" },
@@ -828,6 +820,40 @@
 
         let activePasses = [];
 
+        function convertToNepaliNumber(numStr) {
+            const englishToNepali = {
+                '0': '०', '1': '१', '2': '२', '3': '३', '4': '४',
+                '5': '५', '6': '६', '7': '७', '8': '८', '9': '९'
+            };
+            return String(numStr).replace(/[0-9]/g, function(w) {
+                return englishToNepali[w];
+            });
+        }
+
+        function getAutomaticNepaliDate() {
+            const now = new Date();
+            let bsYear = 2083;
+            let bsMonth = 4; // श्रावण
+            let bsDay = 16;  // १६ गते
+
+            const targetAD = new Date(2026, 7, 1); 
+            const diffTime = now.getTime() - targetAD.getTime();
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+            let baseShrawanDays = 16 + diffDays;
+            
+            if (baseShrawanDays > 31) {
+                baseShrawanDays -= 31;
+                bsMonth = 5; 
+            }
+
+            let nepaliYearStr = convertToNepaliNumber(bsYear);
+            let nepaliDayStr = convertToNepaliNumber(baseShrawanDays);
+            let monthName = (bsMonth === 4) ? "श्रावण" : "भाद्र";
+
+            return `${nepaliYearStr} साल ${monthName} ${nepaliDayStr} गते`;
+        }
+
         function updateTime() {
             const now = new Date();
             let hours = now.getHours();
@@ -836,12 +862,12 @@
             const ampm = hours >= 12 ? 'अपराह्न (PM)' : 'पूर्वाह्न (AM)';
             hours = hours % 12 || 12;
             
-            const formattedTime = `${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+            const formattedTime = `${convertToNepaliNumber(String(hours).padStart(2, '0'))}:${convertToNepaliNumber(minutes)}:${convertToNepaliNumber(seconds)} ${ampm}`;
             document.getElementById('currentTime').value = formattedTime;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('nepaliDate').value = "२०८३ साल श्रावण १५ गते";
+            document.getElementById('nepaliDate').value = getAutomaticNepaliDate();
             updateTime();
             setInterval(updateTime, 1000);
             setInterval(cleanExpiredPasses, 60000);
@@ -861,39 +887,51 @@
             }
         }
 
-        function printPassData(code, rankName, date, time, returnDate, destination) {
-            document.getElementById('p_compCode').innerText = code;
-            document.getElementById('p_empName').innerText = rankName;
-            document.getElementById('p_nepaliDate').innerText = date;
-            document.getElementById('p_currentTime').innerText = time;
-            document.getElementById('p_returnDate').innerText = returnDate || 'तोकिएको छैन';
-            document.getElementById('p_destination').innerText = destination;
+        // एकल पास प्रिन्ट गर्न
+        function printSinglePass(pass) {
+            fillPassSlots([pass]);
+            setTimeout(() => { window.print(); }, 300);
+        }
 
-            const qrcodeContainer = document.getElementById('qrcode');
-            qrcodeContainer.innerHTML = ''; 
+        // चेकबक्स मार्फत छानिएका पासहरू प्रिन्ट गर्न
+        function printSelectedPasses() {
+            const checkboxes = document.querySelectorAll('.pass-checkbox:checked');
+            let selectedList = [];
+            checkboxes.forEach(cb => {
+                const id = Number(cb.value);
+                const found = activePasses.find(p => p.id === id);
+                if (found) selectedList.push(found);
+            });
 
-            const qrText = `गेट पास विवरण:\nकोड: ${code}\nनाम: ${rankName}\nमिति: ${date}\nप्रस्थान: ${time}\nफर्कने: ${returnDate}\nस्थान/कारण: ${destination}`;
-
-            try {
-                if (typeof QRCode !== 'undefined') {
-                    new QRCode(qrcodeContainer, {
-                        text: qrText,
-                        width: 110,
-                        height: 110,
-                        colorDark : "#001f3f",
-                        colorLight : "#ffffff",
-                        correctLevel : QRCode.CorrectLevel.H
-                    });
-                } else {
-                    qrcodeContainer.innerHTML = `<span style="font-size:12px; color:red;">QR कोड लोड हुन सकेन</span>`;
-                }
-            } catch (error) {
-                console.error("QR Code Error:", error);
+            if (selectedList.length === 0) {
+                alert("कृपया प्रिन्ट गर्न कम्तीमा एउटा पास छान्नुहोस्!");
+                return;
             }
 
-            setTimeout(() => {
-                window.print();
-            }, 500);
+            fillPassSlots(selectedList);
+            setTimeout(() => { window.print(); }, 300);
+        }
+
+        // ६ वटा स्लटहरूमा डाटा भर्ने वा खाली छाड्ने फंक्सन
+        function fillPassSlots(passes) {
+            for (let i = 1; i <= 6; i++) {
+                let p = passes[i - 1];
+                if (p) {
+                    document.getElementById(`p_compCode_${i}`).innerText = p.code;
+                    document.getElementById(`p_empName_${i}`).innerText = p.rankName;
+                    document.getElementById(`p_nepaliDate_${i}`).innerText = p.date;
+                    document.getElementById(`p_currentTime_${i}`).innerText = p.time;
+                    document.getElementById(`p_returnDate_${i}`).innerText = p.returnDate || 'तोकिएको छैन';
+                    document.getElementById(`p_destination_${i}`).innerText = p.destination;
+                } else {
+                    document.getElementById(`p_compCode_${i}`).innerText = '';
+                    document.getElementById(`p_empName_${i}`).innerText = '';
+                    document.getElementById(`p_nepaliDate_${i}`).innerText = '';
+                    document.getElementById(`p_currentTime_${i}`).innerText = '';
+                    document.getElementById(`p_returnDate_${i}`).innerText = '';
+                    document.getElementById(`p_destination_${i}`).innerText = '';
+                }
+            }
         }
 
         function handleSubmit(event) {
@@ -902,7 +940,7 @@
             const code = document.getElementById('compCode').value;
             const rank = document.getElementById('rank').value || 'अन्य';
             const name = document.getElementById('empName').value;
-            const date = document.getElementById('nepaliDate').value; // २०८३ साल श्रावण १५ गते (२०८३-०४-१५ सरह)
+            const date = document.getElementById('nepaliDate').value; 
             const time = document.getElementById('currentTime').value;
             const returnDateInput = document.getElementById('returnDate').value.trim();
             const returnDate = returnDateInput || '-';
@@ -910,8 +948,6 @@
             const rankName = `${rank} ${name}`.trim();
 
             if (returnDateInput !== '') {
-                // वर्तमान प्रस्थान मिति २०८३-०४-१५ सँग तुलना गर्न YYYY-MM-DD ढाँचा छुट्याउने
-                // यदि प्रयोगकर्ताले '2083-04-06' वा यस्तै YYYY-MM-DD ढाँचा लेखेको छ भने:
                 const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/;
                 const match = returnDateInput.match(datePattern);
 
@@ -920,10 +956,18 @@
                     const retMonth = parseInt(match[2]);
                     const retDay = parseInt(match[3]);
 
-                    // प्रस्थान मिति: २०८३ (वर्ष) - ०४ (महिना/श्रावण) - १५ (गते)
-                    const depYear = 2083;
-                    const depMonth = 4;
-                    const depDay = 15;
+                    const now = new Date();
+                    const targetAD = new Date(2026, 7, 1);
+                    const diffTime = now.getTime() - targetAD.getTime();
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    let depDay = 16 + diffDays;
+                    let depMonth = 4;
+                    let depYear = 2083;
+
+                    if (depDay > 31) {
+                        depDay -= 31;
+                        depMonth = 5;
+                    }
 
                     let isBefore = false;
                     if (retYear < depYear) {
@@ -939,18 +983,8 @@
                         return;
                     }
                 } else {
-                    // यदि अन्य पाठ वा पुराना तरिकाले मिति राखिएको छ भने त्यसलाई पनि रोक्नको लागि सुरक्षा जाँच
-                    if (returnDateInput.includes("2083-04-01") || returnDateInput.includes("2083-04-02") || 
-                        returnDateInput.includes("2083-04-03") || returnDateInput.includes("2083-04-04") || 
-                        returnDateInput.includes("2083-04-05") || returnDateInput.includes("2083-04-06") || 
-                        returnDateInput.includes("2083-04-07") || returnDateInput.includes("2083-04-08") || 
-                        returnDateInput.includes("2083-04-09") || returnDateInput.includes("2083-04-10") || 
-                        returnDateInput.includes("2083-04-11") || returnDateInput.includes("2083-04-12") || 
-                        returnDateInput.includes("2083-04-13") || returnDateInput.includes("2083-04-14") || 
-                        returnDateInput.includes("२०८३-०४-०") || returnDateInput.includes("२०८३-०४-११") || 
-                        returnDateInput.includes("२०८३-०४-१२") || returnDateInput.includes("२०८३-०४-१३") || 
-                        returnDateInput.includes("२०८३-०४-१४") || returnDateInput.includes("2082") || 
-                        returnDateInput.includes("श्रावण १४") || returnDateInput.includes("श्रावण १३")) {
+                    const lowerInput = returnDateInput.toLowerCase();
+                    if (lowerInput.includes("2082") || lowerInput.includes("श्रावण १५") || lowerInput.includes("श्रावण १४") || lowerInput.includes("श्रावण १३")) {
                         alert("फर्कने मितिमा अगाडीको मिति राख्नु होस");
                         return;
                     }
@@ -967,7 +1001,7 @@
             document.getElementById('successMessage').style.display = 'block';
 
             document.getElementById('gateForm').reset();
-            document.getElementById('nepaliDate').value = "२०८३ साल श्रावण १५ गते";
+            document.getElementById('nepaliDate').value = getAutomaticNepaliDate();
             
             setTimeout(() => {
                 document.getElementById('successMessage').style.display = 'none';
@@ -993,6 +1027,7 @@
             activePasses.forEach(pass => {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
+                    <td><input type="checkbox" class="pass-checkbox" value="${pass.id}"></td>
                     <td>${pass.code}</td>
                     <td>${pass.rankName}</td>
                     <td>${pass.time}</td>
@@ -1004,7 +1039,7 @@
                 `;
 
                 newRow.querySelector('.action-btn').addEventListener('click', () => {
-                    printPassData(pass.code, pass.rankName, pass.date, pass.time, pass.returnDate, pass.destination);
+                    printSinglePass(pass);
                 });
 
                 tableBody.appendChild(newRow);
