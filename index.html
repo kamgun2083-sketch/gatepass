@@ -159,6 +159,7 @@
             box-sizing: border-box;
             border-top: 4px solid #001f3f;
             margin-bottom: 25px;
+            overflow-x: auto; /* मोबाइल स्क्रينमा टेबल बिग्रिनबाट बचाउन */
         }
 
         .batch-print-bar {
@@ -166,12 +167,15 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 5px;
+            min-width: 600px; /* मोबाइलमा छरितो देखिन मिनिमम चौडाइ */
         }
 
         th, td {
@@ -295,6 +299,7 @@
             .pass-details {
                 width: 100%;
                 margin-bottom: 2px;
+                min-width: unset;
             }
             .pass-details td {
                 border: none;
@@ -1019,13 +1024,13 @@
                     }
 
                     if (isBefore) {
-                        alert("फर्कने मितिमा अगाडीको मिति राख्नु होस");
+                        alert("फर्कने मितिमा अगाडीको मिति राख्नुहोस्");
                         return;
                     }
                 } else {
                     const lowerInput = returnDateInput.toLowerCase();
                     if (lowerInput.includes("2082") || lowerInput.includes("श्रावण १५") || lowerInput.includes("श्रावण १४") || lowerInput.includes("श्रावण १३")) {
-                        alert("फर्कने मितिमा अगाडीको मिति राख्नु होस");
+                        alert("फर्कने मितिमा अगाडीको मिति राख्नुहोस्");
                         return;
                     }
                 }
