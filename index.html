@@ -69,7 +69,7 @@
             font-size: 14px;
         }
 
-        input[type="text"], textarea {
+        input[type="text"], input[type="password"], textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #b0bec5;
@@ -79,7 +79,7 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus, textarea:focus {
+        input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
             border-color: #001f3f;
             outline: none;
         }
@@ -106,7 +106,7 @@
             font-weight: bold;
             background-color: #001f3f;
             margin-top: 10px;
-            transition: background-color 0.3s ease, transform 0.1s ease;
+            transition: background-color 0.3s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
@@ -126,16 +126,39 @@
             font-weight: bold;
         }
 
-        .logs-container {
+        .admin-login-bar {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .admin-toggle-btn {
+            background: none;
+            border: none;
+            color: #001f3f;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .admin-panel {
+            display: none;
             width: 100%;
             max-width: 900px;
-            margin-top: 30px;
+            margin-top: 20px;
+        }
+
+        .logs-container {
+            width: 100%;
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 31, 63, 0.1);
             box-sizing: border-box;
             border-top: 4px solid #001f3f;
+            margin-bottom: 25px;
         }
 
         .batch-print-bar {
@@ -177,11 +200,6 @@
             cursor: pointer;
             font-size: 12px;
             font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .action-btn:hover {
-            background-color: #960b22;
         }
 
         .batch-btn {
@@ -193,10 +211,6 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: bold;
-        }
-
-        .batch-btn:hover {
-            background-color: #218838;
         }
 
         .summary-table th {
@@ -223,7 +237,6 @@
             display: none;
         }
 
-        /* प्रिन्टको लागि A4 साइजमा एउटै पानामा ६ वटा पास ग्रिड लेआउट (२ स्तम्भ र ३ लहर) */
         @media print {
             body * {
                 visibility: hidden;
@@ -372,67 +385,82 @@
         </div>
     </div>
 
-    <!-- दर्जागत संख्या समरी टेबल -->
-    <div class="logs-container" style="border-top: 4px solid #c8102e;">
-        <h3 style="margin-top:0; color:#001f3f;">दर्जागत संख्या विवरण</h3>
-        <table class="summary-table">
-            <thead>
-                <tr>
-                    <th>प्रनाउ</th>
-                    <th>प्रनि</th>
-                    <th>प्रवनानि</th>
-                    <th>प्रनानि</th>
-                    <th>प्रसनि</th>
-                    <th>प्रबह</th>
-                    <th>प्रह</th>
-                    <th>प्रसह</th>
-                    <th>प्रज</th>
-                    <th>प्रकास</th>
-                    <th>अन्य</th>
-                    <th>जम्मा</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td id="cnt_प्रनाउ">0</td>
-                    <td id="cnt_प्रनि">0</td>
-                    <td id="cnt_प्रवनानि">0</td>
-                    <td id="cnt_प्रनानि">0</td>
-                    <td id="cnt_प्रसनि">0</td>
-                    <td id="cnt_प्रबह">0</td>
-                    <td id="cnt_प्रह">0</td>
-                    <td id="cnt_प्रसह">0</td>
-                    <td id="cnt_प्रज">0</td>
-                    <td id="cnt_प्रकास">0</td>
-                    <td id="cnt_अन्य">0</td>
-                    <td id="cnt_total" style="background-color: #001f3f; color: white;">0</td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- एडमिन लगइन बटन -->
+    <div class="admin-login-bar">
+        <button class="admin-toggle-btn" onclick="toggleAdminLogin()">🔐 एडमिन लगइन (Admin Login)</button>
     </div>
 
-    <!-- दर्ता भएका पासहरूको सूची -->
-    <div class="logs-container">
-        <div class="batch-print-bar">
-            <h3 style="margin:0; color:#001f3f;">हालै जारी गरिएका गेट पासहरू</h3>
-            <button class="batch-btn" onclick="printSelectedPasses()">छानिएका (अधिकतम ६ वटा) प्रिन्ट गर्नुहोस्</button>
+    <!-- एडमिन पासवर्ड मोडल/ सेक्सन -->
+    <div id="loginModal" style="display:none; margin-top: 10px; background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 300px; text-align: center;">
+        <label for="adminPass" style="font-size: 13px; margin-bottom: 5px;">एडमिन पासवर्ड राख्नुहोस्:</label>
+        <input type="password" id="adminPass" placeholder="पासवर्ड" style="margin-bottom: 8px;">
+        <button onclick="checkAdminLogin()" class="action-btn" style="width: 100%;">लगइन गर्नुहोस्</button>
+    </div>
+
+    <!-- एडमिनले मात्र देख्ने प्यानल (सुरुमा बन्द रहनेछ) -->
+    <div id="adminPanel" class="admin-panel">
+        <!-- दर्जागत संख्या समरी टेबल -->
+        <div class="logs-container" style="border-top: 4px solid #c8102e; margin-top: 0;">
+            <h3 style="margin-top:0; color:#001f3f;">दर्जागत संख्या विवरण</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>प्रनाउ</th>
+                        <th>प्रनि</th>
+                        <th>प्रवनानि</th>
+                        <th>प्रनानि</th>
+                        <th>प्रसनि</th>
+                        <th>प्रबह</th>
+                        <th>प्रह</th>
+                        <th>प्रसह</th>
+                        <th>प्रज</th>
+                        <th>प्रकास</th>
+                        <th>अन्य</th>
+                        <th>जम्मा</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="cnt_प्रनाउ">0</td>
+                        <td id="cnt_प्रनि">0</td>
+                        <td id="cnt_प्रवनानि">0</td>
+                        <td id="cnt_प्रनानि">0</td>
+                        <td id="cnt_प्रसनि">0</td>
+                        <td id="cnt_प्रबह">0</td>
+                        <td id="cnt_प्रह">0</td>
+                        <td id="cnt_प्रसह">0</td>
+                        <td id="cnt_प्रज">0</td>
+                        <td id="cnt_प्रकास">0</td>
+                        <td id="cnt_अन्य">0</td>
+                        <td id="cnt_total" style="background-color: #001f3f; color: white;">0</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 40px;">छान्नुहोस्</th>
-                    <th>कोड</th>
-                    <th>दर्जा / नाम</th>
-                    <th>प्रस्थान समय</th>
-                    <th>फर्कने मिति/समय</th>
-                    <th>स्थान / कारण</th>
-                    <th>कार्य</th>
-                </tr>
-            </thead>
-            <tbody id="logsTable">
-                <!-- यहाँ डाटा स्वतः थपिनेछ -->
-            </tbody>
-        </table>
+
+        <!-- दर्ता भएका पासहरूको सूची -->
+        <div class="logs-container">
+            <div class="batch-print-bar">
+                <h3 style="margin:0; color:#001f3f;">हालै जारी गरिएका गेट पासहरू</h3>
+                <button class="batch-btn" onclick="printSelectedPasses()">छानिएका (अधिकतम ६ वटा) प्रिन्ट गर्नुहोस्</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">छान्नुहोस्</th>
+                        <th>कोड</th>
+                        <th>दर्जा / नाम</th>
+                        <th>प्रस्थान समय</th>
+                        <th>फर्कने मिति/समय</th>
+                        <th>स्थान / कारण</th>
+                        <th>कार्य</th>
+                    </tr>
+                </thead>
+                <tbody id="logsTable">
+                    <!-- यहाँ डाटा स्वतः थपिनेछ -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- फुटर क्रिडिट -->
@@ -440,7 +468,7 @@
         Designed by बैकुण्ठ सुवेदी
     </footer>
 
-    <!-- प्रिन्ट हुने गेट पास स्लिप (A4 मा ६ वटा छुट्टाछुट्टै पास अट्ने संरचना) -->
+    <!-- प्रिन्ट हुने गेट पास स्लिप -->
     <div id="printablePass">
         <div class="print-grid">
             <script>
@@ -477,7 +505,7 @@
 
     <script>
         const employeeDatabase = {
-           "33223": { rank: "प्रउ", name: "तिलक भारती" },
+            "33223": { rank: "प्रउ", name: "तिलक भारती" },
     "34468": { rank: "प्रनाउ", name: "खगेन्द्र बहादुर खड्का" },
     "313397": { rank: "प्रनि", name: "छे फिन्जो भोटे" },
     "313249": { rank: "प्रनि", name: "जनक राज ढुंगाना" },
@@ -833,8 +861,8 @@
         function getAutomaticNepaliDate() {
             const now = new Date();
             let bsYear = 2083;
-            let bsMonth = 4; // श्रावण
-            let bsDay = 16;  // १६ गते
+            let bsMonth = 4; 
+            let bsDay = 16;  
 
             const targetAD = new Date(2026, 7, 1); 
             const diffTime = now.getTime() - targetAD.getTime();
@@ -887,13 +915,26 @@
             }
         }
 
-        // एकल पास प्रिन्ट गर्न
+        function toggleAdminLogin() {
+            const modal = document.getElementById('loginModal');
+            modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAdminLogin() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === "admin123") {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+            } else {
+                alert("गलत पासवर्ड! कृपया फेरि प्रयास गर्नुहोस्।");
+            }
+        }
+
         function printSinglePass(pass) {
             fillPassSlots([pass]);
             setTimeout(() => { window.print(); }, 300);
         }
 
-        // चेकबक्स मार्फत छानिएका पासहरू प्रिन्ट गर्न
         function printSelectedPasses() {
             const checkboxes = document.querySelectorAll('.pass-checkbox:checked');
             let selectedList = [];
@@ -912,7 +953,6 @@
             setTimeout(() => { window.print(); }, 300);
         }
 
-        // ६ वटा स्लटहरूमा डाटा भर्ने वा खाली छाड्ने फंक्सन
         function fillPassSlots(passes) {
             for (let i = 1; i <= 6; i++) {
                 let p = passes[i - 1];
