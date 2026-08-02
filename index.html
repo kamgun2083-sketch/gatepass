@@ -1,511 +1,510 @@
-<!DOCTYPE html>
-<html lang="ne">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>डिजिटल गेट पास प्रणाली - महाराजगंज</title>
-    
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .form-container {
+        background-color: #ffffff;
+        padding: 0 0 25px 0;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 31, 63, 0.15);
+        width: 100%;
+        max-width: 500px;
+        box-sizing: border-box;
+        position: relative;
+        border-top: 5px solid #c8102e;
+        overflow: hidden;
+    }
+
+    .form-header {
+        background-color: #001f3f;
+        padding: 15px 20px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-header h2 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .form-header h3 {
+        color: #d4af37;
+        font-size: 15px;
+        margin: 6px 0 0 0;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+
+    form {
+        padding: 0 25px;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 4px;
+        color: #001f3f;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    input[type="text"], input[type="password"], textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #b0bec5;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+        border-color: #001f3f;
+        outline: none;
+    }
+
+    .auto-fill {
+        background-color: #e9ecef;
+        color: #1a252f;
+        font-weight: bold;
+    }
+
+    textarea {
+        resize: vertical;
+        height: 60px;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 12px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        background-color: #001f3f;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .btn-submit:hover {
+        background-color: #001124;
+    }
+
+    .success-msg {
+        display: none;
+        margin: 15px 25px 0 25px;
+        padding: 10px;
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 4px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .admin-login-bar {
+        width: 100%;
+        max-width: 500px;
+        margin-top: 15px;
+        text-align: right;
+    }
+
+    .admin-toggle-btn {
+        background: none;
+        border: none;
+        color: #001f3f;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .admin-panel {
+        display: none;
+        width: 100%;
+        max-width: 900px;
+        margin-top: 20px;
+    }
+
+    .logs-container {
+        width: 100%;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 31, 63, 0.1);
+        box-sizing: border-box;
+        border-top: 4px solid #001f3f;
+        margin-bottom: 25px;
+        overflow-x: auto;
+    }
+
+    .batch-print-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+        min-width: 600px;
+    }
+
+    th, td {
+        border: 1px solid #cfd8dc;
+        padding: 8px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    th {
+        background-color: #001f3f;
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    .action-btn {
+        padding: 6px 14px;
+        background-color: #c8102e;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .batch-btn {
+        padding: 8px 16px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .summary-table th {
+        background-color: #c8102e;
+        color: white;
+        font-size: 12px;
+    }
+    .summary-table td {
+        font-weight: bold;
+        color: #001f3f;
+        font-size: 13px;
+    }
+
+    footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 13px;
+        color: #001f3f;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+
+    #printablePass {
+        display: none;
+    }
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #printablePass, #printablePass * {
+            visibility: visible;
+        }
+        #printablePass {
+            display: block !important;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 4mm;
+            box-sizing: border-box;
+        }
+        .print-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(3, 1fr);
+            gap: 5mm;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .pass-ticket {
+            border: 1px solid #001f3f;
+            padding: 6px 8px;
+            border-radius: 3px;
+            background: #fff;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .form-container {
-            background-color: #ffffff;
-            padding: 0 0 25px 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 31, 63, 0.15);
-            width: 100%;
-            max-width: 500px;
-            box-sizing: border-box;
-            position: relative;
-            border-top: 5px solid #c8102e;
+            justify-content: space-between;
+            height: 100%;
             overflow: hidden;
         }
-
-        .form-header {
-            background-color: #001f3f;
-            padding: 15px 20px;
+        .pass-header {
             text-align: center;
-            margin-bottom: 20px;
+            border-bottom: 1px solid #c8102e;
+            padding-bottom: 2px;
+            margin-bottom: 3px;
         }
-
-        .form-header h2 {
-            color: #ffffff;
+        .pass-header h2 {
             margin: 0;
-            font-size: 17px;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-
-        .form-header h3 {
-            color: #d4af37;
-            font-size: 15px;
-            margin: 6px 0 0 0;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-        }
-
-        form {
-            padding: 0 25px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 4px;
+            font-size: 11px;
             color: #001f3f;
-            font-weight: bold;
-            font-size: 14px;
         }
-
-        input[type="text"], input[type="password"], textarea {
+        .pass-header h3 {
+            margin: 1px 0 0 0;
+            font-size: 9px;
+            color: #c8102e;
+        }
+        .pass-details {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #b0bec5;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
+            margin-bottom: 2px;
+            min-width: unset;
         }
-
-        input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-            border-color: #001f3f;
-            outline: none;
-        }
-
-        .auto-fill {
-            background-color: #e9ecef;
-            color: #1a252f;
-            font-weight: bold;
-        }
-
-        textarea {
-            resize: vertical;
-            height: 60px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 12px;
-            color: white;
+        .pass-details td {
             border: none;
-            border-radius: 4px;
-            font-size: 15px;
-            cursor: pointer;
+            border-bottom: 0.5px solid #eee;
+            padding: 2px 2px;
+            font-size: 9.5px;
+            text-align: left;
+        }
+        .pass-details td.label {
             font-weight: bold;
-            background-color: #001f3f;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .btn-submit:hover {
-            background-color: #001124;
-        }
-
-        .success-msg {
-            display: none;
-            margin: 15px 25px 0 25px;
-            padding: 10px;
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .admin-login-bar {
-            width: 100%;
-            max-width: 500px;
-            margin-top: 15px;
-            text-align: right;
-        }
-
-        .admin-toggle-btn {
-            background: none;
-            border: none;
+            width: 42%;
             color: #001f3f;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: underline;
         }
-
-        .admin-panel {
-            display: none;
-            width: 100%;
-            max-width: 900px;
-            margin-top: 20px;
-        }
-
-        .logs-container {
-            width: 100%;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 31, 63, 0.1);
-            box-sizing: border-box;
-            border-top: 4px solid #001f3f;
-            margin-bottom: 25px;
-            overflow-x: auto;
-        }
-
-        .batch-print-bar {
+        .signature-box-container {
+            margin-top: 4px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 10px;
+            gap: 2px;
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 5px;
-            min-width: 600px;
-        }
-
-        th, td {
-            border: 1px solid #cfd8dc;
-            padding: 8px;
+        .signature-box {
             text-align: center;
-            font-size: 13px;
-        }
-
-        th {
-            background-color: #001f3f;
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        .action-btn {
-            padding: 6px 14px;
-            background-color: #c8102e;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .batch-btn {
-            padding: 8px 16px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .summary-table th {
-            background-color: #c8102e;
-            color: white;
-            font-size: 12px;
-        }
-        .summary-table td {
-            font-weight: bold;
-            color: #001f3f;
-            font-size: 13px;
-        }
-
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 13px;
+            border-top: 1px dashed #001f3f;
+            width: 23%;
+            padding-top: 1px;
+            font-size: 7.5px;
             color: #001f3f;
             font-weight: bold;
-            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
-
-        #printablePass {
-            display: none;
+        .designer-credit {
+            font-size: 8px;
+            color: #555;
+            text-align: center;
+            margin-top: 2px;
+            border-top: 0.5px solid #ddd;
+            padding-top: 1px;
         }
+    }
+</style>
 
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #printablePass, #printablePass * {
-                visibility: visible;
-            }
-            #printablePass {
-                display: block !important;
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100vw;
-                height: 100vh;
-                margin: 0;
-                padding: 4mm;
-                box-sizing: border-box;
-            }
-            .print-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: repeat(3, 1fr);
-                gap: 5mm;
-                width: 100%;
-                height: 100%;
-                box-sizing: border-box;
-            }
-            .pass-ticket {
-                border: 1px solid #001f3f;
-                padding: 6px 8px;
-                border-radius: 3px;
-                background: #fff;
-                box-sizing: border-box;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                height: 100%;
-                overflow: hidden;
-            }
-            .pass-header {
-                text-align: center;
-                border-bottom: 1px solid #c8102e;
-                padding-bottom: 2px;
-                margin-bottom: 3px;
-            }
-            .pass-header h2 {
-                margin: 0;
-                font-size: 11px;
-                color: #001f3f;
-            }
-            .pass-header h3 {
-                margin: 1px 0 0 0;
-                font-size: 9px;
-                color: #c8102e;
-            }
-            .pass-details {
-                width: 100%;
-                margin-bottom: 2px;
-                min-width: unset;
-            }
-            .pass-details td {
-                border: none;
-                border-bottom: 0.5px solid #eee;
-                padding: 2px 2px;
-                font-size: 9.5px;
-                text-align: left;
-            }
-            .pass-details td.label {
-                font-weight: bold;
-                width: 42%;
-                color: #001f3f;
-            }
-            .signature-box-container {
-                margin-top: 4px;
-                display: flex;
-                justify-content: space-between;
-            }
-            .signature-box {
-                text-align: center;
-                border-top: 1px dashed #001f3f;
-                width: 90px;
-                padding-top: 1px;
-                font-size: 8.5px;
-                color: #001f3f;
-                font-weight: bold;
-            }
-            .designer-credit {
-                font-size: 8px;
-                color: #555;
-                text-align: center;
-                margin-top: 2px;
-                border-top: 0.5px solid #ddd;
-                padding-top: 1px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="form-container">
-        <div class="form-header">
-            <h2>काठमाडौं उपत्यका प्रहरी, सशस्त्र प्रहरी गण नं. २ महाराजगंज</h2>
-            <h3>डिजिटल गेट पास प्रणाली</h3>
-        </div>
-
-        <form id="gateForm" onsubmit="handleSubmit(event)">
-            <div class="form-group">
-                <label for="compCode">कम्प्युटर कोड (Computer Code):</label>
-                <input type="text" id="compCode" required placeholder="जस्तै: 34468" oninput="getEmployeeDetails()">
-            </div>
-
-            <div class="form-group">
-                <label for="rank">दर्जा (Rank):</label>
-                <input type="text" id="rank" class="auto-fill" readonly placeholder="स्वयं आउनेछ">
-            </div>
-
-            <div class="form-group">
-                <label for="empName">नाम, थर (Full Name):</label>
-                <input type="text" id="empName" class="auto-fill" readonly placeholder="स्वयं आउनेछ">
-            </div>
-
-            <div class="form-group">
-                <label for="nepaliDate">मिति (Nepali Date):</label>
-                <input type="text" id="nepaliDate" class="auto-fill" required readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="currentTime">प्रस्थान समय (Departure Time):</label>
-                <input type="text" id="currentTime" class="auto-fill" required readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="returnDate">फर्कने मिति र समय (Expected Return Date & Time):</label>
-                <input type="text" id="returnDate" placeholder="जस्तै: २०८३-०५-०१ अपराह्न ०५:०० वा मिति/समय">
-            </div>
-
-            <div class="form-group">
-                <label for="destination">जाने स्थान र कारण (Destination & Purpose):</label>
-                <textarea id="destination" required placeholder="कार्यालय बाहिर जाने स्थान र कारण खुलाउनुहोस्"></textarea>
-            </div>
-
-            <button type="submit" class="btn-submit">सबमिट गर्नुहोस् (Submit)</button>
-        </form>
-
-        <div id="successMessage" class="success-msg">
-            विवरण सफलतापूर्वक दर्ता भयो!
-        </div>
+<div class="form-container">
+    <div class="form-header">
+        <h2>काठमाडौं उपत्यका प्रहरी, सशस्त्र प्रहरी गण नं. २ महाराजगंज</h2>
+        <h3>डिजिटल गेट पास प्रणाली</h3>
     </div>
 
-    <!-- एडमिन लगइन बटन -->
-    <div class="admin-login-bar">
-        <button class="admin-toggle-btn" onclick="toggleAdminLogin()">🔐 एडमिन लगइन (Admin Login)</button>
-    </div>
-
-    <!-- एडमिन पासवर्ड मोडल/ सेक्सन -->
-    <div id="loginModal" style="display:none; margin-top: 10px; background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 300px; text-align: center;">
-        <label for="adminPass" style="font-size: 13px; margin-bottom: 5px;">एडमिन पासवर्ड राख्नुहोस्:</label>
-        <input type="password" id="adminPass" placeholder="पासवर्ड" style="margin-bottom: 8px;">
-        <button onclick="checkAdminLogin()" class="action-btn" style="width: 100%;">लगइन गर्नुहोस्</button>
-    </div>
-
-    <!-- एडमिनले मात्र देख्ने प्यानल -->
-    <div id="adminPanel" class="admin-panel">
-        <div class="logs-container" style="border-top: 4px solid #c8102e; margin-top: 0;">
-            <h3 style="margin-top:0; color:#001f3f;">दर्जागत संख्या विवरण</h3>
-            <table class="summary-table">
-                <thead>
-                    <tr>
-                        <th>प्रनाउ</th>
-                        <th>प्रनि</th>
-                        <th>प्रवनानि</th>
-                        <th>प्रनानि</th>
-                        <th>प्रसनि</th>
-                        <th>प्रबह</th>
-                        <th>प्रह</th>
-                        <th>प्रसह</th>
-                        <th>प्रज</th>
-                        <th>प्रकास</th>
-                        <th>अन्य</th>
-                        <th>जम्मा</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td id="cnt_प्रनाउ">0</td>
-                        <td id="cnt_प्रनि">0</td>
-                        <td id="cnt_प्रवनानि">0</td>
-                        <td id="cnt_प्रनानि">0</td>
-                        <td id="cnt_प्रसनि">0</td>
-                        <td id="cnt_प्रबह">0</td>
-                        <td id="cnt_प्रह">0</td>
-                        <td id="cnt_प्रसह">0</td>
-                        <td id="cnt_प्रज">0</td>
-                        <td id="cnt_प्रकास">0</td>
-                        <td id="cnt_अन्य">0</td>
-                        <td id="cnt_total" style="background-color: #001f3f; color: white;">0</td>
-                    </tr>
-                </tbody>
-            </table>
+    <form id="gateForm" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+            <label for="compCode">कम्प्युटर कोड (Computer Code):</label>
+            <input type="text" id="compCode" required placeholder="जस्तै: 34468" oninput="getEmployeeDetails()">
         </div>
 
-        <div class="logs-container">
-            <div class="batch-print-bar">
-                <h3 style="margin:0; color:#001f3f;">हालै जारी गरिएका गेट पासहरू</h3>
-                <button class="batch-btn" onclick="printSelectedPasses()">छानिएका (अधिकतम ६ वटा) प्रिन्ट गर्नुहोस्</button>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 40px;">छान्नुहोस्</th>
-                        <th>कोड</th>
-                        <th>दर्जा / नाम</th>
-                        <th>प्रस्थान समय</th>
-                        <th>फर्कने मिति/समय</th>
-                        <th>स्थान / कारण</th>
-                        <th>कार्य</th>
-                    </tr>
-                </thead>
-                <tbody id="logsTable">
-                </tbody>
-            </table>
+        <div class="form-group">
+            <label for="rank">दर्जा (Rank):</label>
+            <input type="text" id="rank" class="auto-fill" readonly placeholder="स्वयं आउनेछ">
         </div>
+
+        <div class="form-group">
+            <label for="empName">नाम, थर (Full Name):</label>
+            <input type="text" id="empName" class="auto-fill" readonly placeholder="स्वयं आउनेछ">
+        </div>
+
+        <div class="form-group">
+            <label for="nepaliDate">मिति (Nepali Date):</label>
+            <input type="text" id="nepaliDate" class="auto-fill" required readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="currentTime">प्रस्थान समय (Departure Time):</label>
+            <input type="text" id="currentTime" class="auto-fill" required readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="returnDate">फर्कने मिति र समय (Expected Return Date & Time):</label>
+            <input type="text" id="returnDate" placeholder="जस्तै: २०८३-०५-०१ अपराह्न ०५:०० वा मिति/समय">
+        </div>
+
+        <div class="form-group">
+            <label for="destination">जाने स्थान र कारण (Destination & Purpose):</label>
+            <textarea id="destination" required placeholder="कार्यालय बाहिर जाने स्थान र कारण खुलाउनुहोस्"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">सबमिट गर्नुहोस् (Submit)</button>
+    </form>
+
+    <div id="successMessage" class="success-msg">
+        विवरण सफलतापूर्वक दर्ता भयो!
+    </div>
+</div>
+
+<!-- एडमिन लगइन बार -->
+<div class="admin-login-bar">
+    <button class="admin-toggle-btn" onclick="toggleAdminLogin()">🔐 एडमिन लगइन (Admin Login)</button>
+</div>
+
+<!-- एडमिन पासवर्ड मोडल -->
+<div id="loginModal" style="display:none; margin-top: 10px; background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 300px; text-align: center;">
+    <label for="adminPass" style="font-size: 13px; margin-bottom: 5px;">एडमिन पासवर्ड राख्नुहोस्:</label>
+    <input type="password" id="adminPass" placeholder="पासवर्ड" style="margin-bottom: 8px;">
+    <button onclick="checkAdminLogin()" class="action-btn" style="width: 100%;">लगइन गर्नुहोस्</button>
+</div>
+
+<!-- एडमिन प्यानल -->
+<div id="adminPanel" class="admin-panel">
+    <!-- दर्जागत संख्या समरी टेबल -->
+    <div class="logs-container" style="border-top: 4px solid #c8102e; margin-top: 0;">
+        <h3 style="margin-top:0; color:#001f3f;">दर्जागत संख्या विवरण</h3>
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>प्रनाउ</th>
+                    <th>प्रनि</th>
+                    <th>प्रवनानि</th>
+                    <th>प्रनानि</th>
+                    <th>प्रसनि</th>
+                    <th>प्रबह</th>
+                    <th>प्रह</th>
+                    <th>प्रसह</th>
+                    <th>प्रज</th>
+                    <th>प्रकास</th>
+                    <th>अन्य</th>
+                    <th>जम्मा</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="cnt_प्रनाउ">0</td>
+                    <td id="cnt_प्रनि">0</td>
+                    <td id="cnt_प्रवनानि">0</td>
+                    <td id="cnt_प्रनानि">0</td>
+                    <td id="cnt_प्रसनि">0</td>
+                    <td id="cnt_प्रबह">0</td>
+                    <td id="cnt_प्रह">0</td>
+                    <td id="cnt_प्रसह">0</td>
+                    <td id="cnt_प्रज">0</td>
+                    <td id="cnt_प्रकास">0</td>
+                    <td id="cnt_अन्य">0</td>
+                    <td id="cnt_total" style="background-color: #001f3f; color: white;">0</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <footer>
-        Designed by बैकुण्ठ सुवेदी
-    </footer>
+    <!-- दर्ता भएका पासहरूको सूची -->
+    <div class="logs-container">
+        <div class="batch-print-bar">
+            <h3 style="margin:0; color:#001f3f;">हालै जारी गरिएका गेट पासहरू</h3>
+            <button class="batch-btn" onclick="printSelectedPasses()">छानिएका (अधिकतम ६ वटा) प्रिन्ट गर्नुहोस्</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40px;">छान्नुहोस्</th>
+                    <th>कोड</th>
+                    <th>दर्जा / नाम</th>
+                    <th>प्रस्थान समय</th>
+                    <th>फर्कने मिति/समय</th>
+                    <th>स्थान / कारण</th>
+                    <th>कार्य</th>
+                </tr>
+            </thead>
+            <tbody id="logsTable">
+                <!-- डाटा यहाँ आउनेछ -->
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    <div id="printablePass">
-        <div class="print-grid">
-            <script>
-                for (let i = 1; i <= 6; i++) {
-                    document.write(`
-                        <div class="pass-ticket">
-                            <div>
-                                <div class="pass-header">
-                                    <h2>काठमाडौं उपत्यका प्रहरी</h2>
-                                    <h3>सशस्त्र प्रहरी गण नं. २ महाराजगंज - डिजिटल गेट पास</h3>
-                                </div>
-                                <table class="pass-details">
-                                    <tr><td class="label">कम्प्युटर कोड:</td><td id="p_compCode_${i}"></td></tr>
-                                    <tr><td class="label">दर्जा / नाम:</td><td id="p_empName_${i}"></td></tr>
-                                    <tr><td class="label">मिति:</td><td id="p_nepaliDate_${i}"></td></tr>
-                                    <tr><td class="label">प्रस्थान समय:</td><td id="p_currentTime_${i}"></td></tr>
-                                    <tr><td class="label">फर्कने मिति/समय:</td><td id="p_returnDate_${i}"></td></tr>
-                                    <tr><td class="label">जाने स्थान / कारण:</td><td id="p_destination_${i}"></td></tr>
-                                </table>
+<footer>
+    Designed by बैकुण्ठ सुवेदी
+</footer>
+
+<!-- प्रिन्ट हुने गेट पास स्लिप -->
+<div id="printablePass">
+    <div class="print-grid">
+        <script>
+            for (let i = 1; i <= 6; i++) {
+                document.write(`
+                    <div class="pass-ticket">
+                        <div>
+                            <div class="pass-header">
+                                <h2>काठमाडौं उपत्यका प्रहरी</h2>
+                                <h3>सशस्त्र प्रहरी गण नं. २ महाराजगंज - डिजिटल गेट पास</h3>
                             </div>
-                            <div>
-                                <div class="signature-box-container">
-                                    <div class="signature-box">कर्मचारीको दस्तखत</div>
-                                    <div class="signature-box">प्रमाणित गर्नेको दस्तखत</div>
-                                </div>
-                                <div class="designer-credit">Designed by बैकुण्ठ सुवेदी</div>
-                            </div>
+                            <table class="pass-details">
+                                <tr><td class="label">कम्प्युटर कोड:</td><td id="p_compCode_${i}"></td></tr>
+                                <tr><td class="label">दर्जा / नाम:</td><td id="p_empName_${i}"></td></tr>
+                                <tr><td class="label">मिति:</td><td id="p_nepaliDate_${i}"></td></tr>
+                                <tr><td class="label">प्रस्थान समय:</td><td id="p_currentTime_${i}"></td></tr>
+                                <tr><td class="label">फर्कने मिति/समय:</td><td id="p_returnDate_${i}"></td></tr>
+                                <tr><td class="label">जाने स्थान / कारण:</td><td id="p_destination_${i}"></td></tr>
+                            </table>
                         </div>
-                    `);
-                }
-            </script>
-        </div>
+                        <div>
+                            <div class="signature-box-container">
+                                <div class="signature-box">कर्मचारीको दस्तखत</div>
+                                <div class="signature-box">ह.मे.</div>
+                                <div class="signature-box">सु.मे.</div>
+                                <div class="signature-box">फिल्ड अधिकृत</div>
+                            </div>
+                            <div class="designer-credit">Designed by बैकुण्ठ सुवेदी</div>
+                        </div>
+                    </div>
+                `);
+            }
+        </script>
     </div>
+</div>
 
-    <script>
-        const employeeDatabase = {
-            "33223": { rank: "प्रउ", name: "तिलक भारती" },
+<script>
+    const employeeDatabase = {
+        "33223": { rank: "प्रउ", name: "तिलक भारती" },
     "34468": { rank: "प्रनाउ", name: "खगेन्द्र बहादुर खड्का" },
     "313397": { rank: "प्रनि", name: "छे फिन्जो भोटे" },
     "313249": { rank: "प्रनि", name: "जनक राज ढुंगाना" },
@@ -552,7 +551,9 @@
     "366117": { rank: "प्रवह", name: "झषनाथ पोखेल" },
     "392552": { rank: "प्रवह", name: "दमेन्ती बुढाथोकी" },
     "378154": { rank: "प्रवह", name: "बैजनाथ भोर" },
-    "360130": { rank: "प्रवह", name: "राजाराम कार्की" },   
+    "360130": { rank: "प्रवह", name: "राजाराम कार्की" },
+    "361942": { rank: "प्रवह", name: "दिपेन्द्र राना" }, 
+    "362009": { rank: "प्रवह", name: "पवित्रा थापा" },
     "391497": { rank: "प्रह", name: "सुन्तली थामी" },
     "380507": { rank: "प्रह", name: "बद्री प्रसाद धिताल" },
     "362621": { rank: "प्रह", name: "फिपरानी लिम्बू" },
@@ -636,7 +637,7 @@
     "422357": { rank: "प्रसह", name: "झलक बहादुर बुढा" },
     "409340": { rank: "प्रसह", name: "उमेश कुमार मण्डल" },
     "412999": { rank: "प्रसह", name: "नरेन्द्र सिंह धामी" },
-    "411991": { rank: "प्रसह", name: "हरि वहादुर खत्री" },
+    "411991": { rank: "प्रसह", name: "हरि बहादुर खप्तरी" },
     "421072": { rank: "प्रसह", name: "कमल खड्का" },
     "400549": { rank: "प्रसह", name: "रोशनी खड्गी" },
     "409128": { rank: "प्रसह", name: "नन्दराज श्रेष्ठ" },
@@ -818,6 +819,8 @@
     "487727": { rank: "प्रज", name: "अमर बहादुर राना मगर" },
     "490877": { rank: "प्रज", name: "श्रवण पण्डित" },
     "468377": { rank: "प्रज", name: "तोयराज भट्ट" },
+    "494722": { rank: "प्रज", name: "अलिमुन निशा" },
+    "484390": { rank: "प्रज", name: "पवन कुमार वली" },
     "550410": { rank: "प्रकास", name: "राम बहादुर तामाङ" },
     "550389": { rank: "प्रकास", name: "सुमन कार्की" },
     "552234": { rank: "प्रकास", name: "मनेश मालमुल" },
@@ -844,291 +847,267 @@
     "558856": { rank: "प्रकास", name: "कम्मान सिंह विश्वकर्मा" },
     "558474": { rank: "प्रकास", name: "एलिसा राई" },
     "550287": { rank: "प्रकास", name: "राम बहादुर अधिकारी" }
+    };
+
+    let activePasses = [];
+
+    function convertToNepaliNumber(numStr) {
+        const englishToNepali = {
+            '0': '०', '1': '१', '2': '२', '3': '३', '4': '४',
+            '5': '५', '6': '६', '7': '७', '8': '८', '9': '९'
         };
+        return String(numStr).replace(/[0-9]/g, function(w) {
+            return englishToNepali[w];
+        });
+    }
 
-        let activePasses = [];
+    function getAutomaticNepaliDate() {
+        const now = new Date();
+        let bsYear = 2083;
+        let bsMonth = 4; 
+        let bsDay = 16;  
 
-        function convertToNepaliNumber(numStr) {
-            const englishToNepali = {
-                '0': '०', '1': '१', '2': '२', '3': '३', '4': '४',
-                '5': '५', '6': '६', '7': '७', '8': '८', '9': '९'
-            };
-            return String(numStr).replace(/[0-9]/g, function(w) {
-                return englishToNepali[w];
-            });
+        const targetAD = new Date(2026, 7, 1); 
+        const diffTime = now.getTime() - targetAD.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        let baseShrawanDays = 16 + diffDays;
+        
+        if (baseShrawanDays > 31) {
+            baseShrawanDays -= 31;
+            bsMonth = 5; 
         }
 
-        function getAutomaticNepaliDate() {
-            const now = new Date();
-            let bsYear = 2083;
-            let bsMonth = 4; 
-            let bsDay = 16;  
+        let nepaliYearStr = convertToNepaliNumber(bsYear);
+        let nepaliDayStr = convertToNepaliNumber(baseShrawanDays);
+        let monthName = (bsMonth === 4) ? "श्रावण" : "भाद्र";
 
-            const targetAD = new Date(2026, 7, 1); 
-            const diffTime = now.getTime() - targetAD.getTime();
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        return `${nepaliYearStr} साल ${monthName} ${nepaliDayStr} गते`;
+    }
 
-            let baseShrawanDays = 16 + diffDays;
-            
-            if (baseShrawanDays > 31) {
-                baseShrawanDays -= 31;
-                bsMonth = 5; 
-            }
+    function updateTime() {
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'अपराह्न (PM)' : 'पूर्वाह्न (AM)';
+        hours = hours % 12 || 12;
+        
+        const formattedTime = `${convertToNepaliNumber(String(hours).padStart(2, '0'))}:${convertToNepaliNumber(minutes)}:${convertToNepaliNumber(seconds)} ${ampm}`;
+        document.getElementById('currentTime').value = formattedTime;
+    }
 
-            let nepaliYearStr = convertToNepaliNumber(bsYear);
-            let nepaliDayStr = convertToNepaliNumber(baseShrawanDays);
-            let monthName = (bsMonth === 4) ? "श्रावण" : "भाद्र";
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('nepaliDate').value = getAutomaticNepaliDate();
+        updateTime();
+        setInterval(updateTime, 1000);
+        setInterval(cleanExpiredPasses, 60000);
+    });
 
-            return `${nepaliYearStr} साल ${monthName} ${nepaliDayStr} गते`;
+    function getEmployeeDetails() {
+        const code = document.getElementById('compCode').value.trim();
+        const rankField = document.getElementById('rank');
+        const nameField = document.getElementById('empName');
+
+        if (employeeDatabase[code]) {
+            rankField.value = employeeDatabase[code].rank;
+            nameField.value = employeeDatabase[code].name;
+        } else {
+            rankField.value = "";
+            nameField.value = "";
         }
+    }
 
-        function updateTime() {
-            const now = new Date();
-            let hours = now.getHours();
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const ampm = hours >= 12 ? 'अपराह्न (PM)' : 'पूर्वाह्न (AM)';
-            hours = hours % 12 || 12;
-            
-            const formattedTime = `${convertToNepaliNumber(String(hours).padStart(2, '0'))}:${convertToNepaliNumber(minutes)}:${convertToNepaliNumber(seconds)} ${ampm}`;
-            document.getElementById('currentTime').value = formattedTime;
+    function toggleAdminLogin() {
+        const modal = document.getElementById('loginModal');
+        modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function checkAdminLogin() {
+        const pass = document.getElementById('adminPass').value;
+        if (pass === "admin123") {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+        } else {
+            alert("गलत पासवर्ड! कृपया फेरि प्रयास गर्नुहोस्।");
         }
+    }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('nepaliDate').value = getAutomaticNepaliDate();
-            updateTime();
-            setInterval(updateTime, 1000);
-            setInterval(cleanExpiredPasses, 60000);
+    function printSinglePass(pass) {
+        fillPassSlots([pass]);
+        setTimeout(() => { window.print(); }, 300);
+    }
+
+    function printSelectedPasses() {
+        const checkboxes = document.querySelectorAll('.pass-checkbox:checked');
+        let selectedList = [];
+        checkboxes.forEach(cb => {
+            const id = Number(cb.value);
+            const found = activePasses.find(p => p.id === id);
+            if (found) selectedList.push(found);
         });
 
-        function getEmployeeDetails() {
-            const code = document.getElementById('compCode').value.trim();
-            const rankField = document.getElementById('rank');
-            const nameField = document.getElementById('empName');
+        if (selectedList.length === 0) {
+            alert("कृपया प्रिन्ट गर्न कम्तीमा एउटा पास छान्नुहोस्!");
+            return;
+        }
 
-            if (employeeDatabase[code]) {
-                rankField.value = employeeDatabase[code].rank;
-                nameField.value = employeeDatabase[code].name;
+        fillPassSlots(selectedList);
+        setTimeout(() => { window.print(); }, 300);
+    }
+
+    function fillPassSlots(passes) {
+        for (let i = 1; i <= 6; i++) {
+            let p = passes[i - 1];
+            if (p) {
+                document.getElementById(`p_compCode_${i}`).innerText = p.code;
+                document.getElementById(`p_empName_${i}`).innerText = p.rankName;
+                document.getElementById(`p_nepaliDate_${i}`).innerText = p.date;
+                document.getElementById(`p_currentTime_${i}`).innerText = p.time;
+                document.getElementById(`p_returnDate_${i}`).innerText = p.returnDate || 'तोकिएको छैन';
+                document.getElementById(`p_destination_${i}`).innerText = p.destination;
             } else {
-                rankField.value = "";
-                nameField.value = "";
+                document.getElementById(`p_compCode_${i}`).innerText = '';
+                document.getElementById(`p_empName_${i}`).innerText = '';
+                document.getElementById(`p_nepaliDate_${i}`).innerText = '';
+                document.getElementById(`p_currentTime_${i}`).innerText = '';
+                document.getElementById(`p_returnDate_${i}`).innerText = '';
+                document.getElementById(`p_destination_${i}`).innerText = '';
             }
         }
+    }
 
-        function toggleAdminLogin() {
-            const modal = document.getElementById('loginModal');
-            modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
-        }
+    function handleSubmit(event) {
+        event.preventDefault();
 
-        function checkAdminLogin() {
-            const pass = document.getElementById('adminPass').value;
-            if (pass === "admin123") {
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
+        const code = document.getElementById('compCode').value;
+        const rank = document.getElementById('rank').value || 'अन्य';
+        const name = document.getElementById('empName').value;
+        const date = document.getElementById('nepaliDate').value; 
+        const time = document.getElementById('currentTime').value;
+        const returnDateInput = document.getElementById('returnDate').value.trim();
+        const returnDate = returnDateInput || '-';
+        const destination = document.getElementById('destination').value;
+        const rankName = `${rank} ${name}`.trim();
+
+        if (returnDateInput !== '') {
+            const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/;
+            const match = returnDateInput.match(datePattern);
+
+            if (match) {
+                const retYear = parseInt(match[1]);
+                const retMonth = parseInt(match[2]);
+                const retDay = parseInt(match[3]);
+
+                const now = new Date();
+                const targetAD = new Date(2026, 7, 1);
+                const diffTime = now.getTime() - targetAD.getTime();
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                let depDay = 16 + diffDays;
+                let depMonth = 4;
+                let depYear = 2083;
+
+                if (depDay > 31) {
+                    depDay -= 31;
+                    depMonth = 5;
+                }
+
+                let isBefore = false;
+                if (retYear < depYear) {
+                    isBefore = true;
+                } else if (retYear === depYear && retMonth < depMonth) {
+                    isBefore = true;
+                } else if (retYear === depYear && retMonth === depMonth && retDay < depDay) {
+                    isBefore = true;
+                }
+
+                if (isBefore) {
+                    alert("फर्कने मितिमा अगाडीको मिति राख्नुहोस्");
+                    return;
+                }
             } else {
-                alert("गलत पासवर्ड! कृपया फेरि प्रयास गर्नुहोस्।");
-            }
-        }
-
-        function printSinglePass(pass) {
-            fillPassSlots([pass]);
-            setTimeout(() => { window.print(); }, 300);
-        }
-
-        function printSelectedPasses() {
-            const checkboxes = document.querySelectorAll('.pass-checkbox:checked');
-            let selectedList = [];
-            checkboxes.forEach(cb => {
-                const id = Number(cb.value);
-                const found = activePasses.find(p => p.id === id);
-                if (found) selectedList.push(found);
-            });
-
-            if (selectedList.length === 0) {
-                alert("कृपया प्रिन्ट गर्न कम्तीमा एउटा पास छान्नुहोस्!");
-                return;
-            }
-
-            fillPassSlots(selectedList);
-            setTimeout(() => { window.print(); }, 300);
-        }
-
-        function fillPassSlots(passes) {
-            for (let i = 1; i <= 6; i++) {
-                let p = passes[i - 1];
-                if (p) {
-                    document.getElementById(`p_compCode_${i}`).innerText = p.code;
-                    document.getElementById(`p_empName_${i}`).innerText = p.rankName;
-                    document.getElementById(`p_nepaliDate_${i}`).innerText = p.date;
-                    document.getElementById(`p_currentTime_${i}`).innerText = p.time;
-                    document.getElementById(`p_returnDate_${i}`).innerText = p.returnDate || 'तोकिएको छैन';
-                    document.getElementById(`p_destination_${i}`).innerText = p.destination;
-                } else {
-                    document.getElementById(`p_compCode_${i}`).innerText = '';
-                    document.getElementById(`p_empName_${i}`).innerText = '';
-                    document.getElementById(`p_nepaliDate_${i}`).innerText = '';
-                    document.getElementById(`p_currentTime_${i}`).innerText = '';
-                    document.getElementById(`p_returnDate_${i}`).innerText = '';
-                    document.getElementById(`p_destination_${i}`).innerText = '';
+                const lowerInput = returnDateInput.toLowerCase();
+                if (lowerInput.includes("2082") || lowerInput.includes("श्रावण १५") || lowerInput.includes("श्रावण १४") || lowerInput.includes("श्रावण १३")) {
+                    alert("फर्कने मितिमा अगाडीको मिति राख्नुहोस्");
+                    return;
                 }
             }
         }
 
-        function handleSubmit(event) {
-            event.preventDefault();
+        const timestamp = Date.now(); 
 
-            const code = document.getElementById('compCode').value;
-            const rank = document.getElementById('rank').value || 'अन्य';
-            const name = document.getElementById('empName').value;
-            const date = document.getElementById('nepaliDate').value; 
-            const time = document.getElementById('currentTime').value;
-            const returnDateInput = document.getElementById('returnDate').value.trim();
-            const returnDate = returnDateInput || '-';
-            const destination = document.getElementById('destination').value;
-            const rankName = `${rank} ${name}`.trim();
+        const passData = { id: timestamp, code, rank, rankName, date, time, returnDate, destination, timestamp };
+        activePasses.unshift(passData);
 
-            if (returnDateInput !== '') {
-                const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/;
-                const match = returnDateInput.match(datePattern);
+        renderUI();
 
-                if (match) {
-                    const retYear = parseInt(match[1]);
-                    const retMonth = parseInt(match[2]);
-                    const retDay = parseInt(match[3]);
+        document.getElementById('successMessage').style.display = 'block';
 
-                    const now = new Date();
-                    const targetAD = new Date(2026, 7, 1);
-                    const diffTime = now.getTime() - targetAD.getTime();
-                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                    let depDay = 16 + diffDays;
-                    let depMonth = 4;
-                    let depYear = 2083;
+        document.getElementById('gateForm').reset();
+        document.getElementById('nepaliDate').value = getAutomaticNepaliDate();
+        
+        setTimeout(() => {
+            document.getElementById('successMessage').style.display = 'none';
+        }, 3000);
+    }
 
-                    if (depDay > 31) {
-                        depDay -= 31;
-                        depMonth = 5;
-                    }
-
-                    let isBefore = false;
-                    if (retYear < depYear) {
-                        isBefore = true;
-                    } else if (retYear === depYear && retMonth < depMonth) {
-                        isBefore = true;
-                    } else if (retYear === depYear && retMonth === depMonth && retDay < depDay) {
-                        isBefore = true;
-                    }
-
-                    if (isBefore) {
-                        alert("फर्कने मितिमा अगाडीको मिति राख्नुहोस्");
-                        return;
-                    }
-                }
-            }
-
-            const timestamp = Date.now(); 
-
-            const passData = { id: timestamp, code, rank, rankName, date, time, returnDate, destination, timestamp };
-            activePasses.unshift(passData);
-
+    function cleanExpiredPasses() {
+        const now = Date.now();
+        const twelveHours = 12 * 60 * 60 * 1000; 
+        
+        const initialLength = activePasses.length;
+        activePasses = activePasses.filter(pass => (now - pass.timestamp) < twelveHours);
+        
+        if (activePasses.length !== initialLength) {
             renderUI();
-
-            // गुगल शिटमा पठाउने डाटा
-            const formData = {
-                code: code,
-                rank: rank,
-                Name: name,
-                date: date,
-                time: time,
-                returnDate: returnDate,
-                destination: destination
-            };
-
-            // यहाँ आफ्नो Apps Script को Web App URL राख्नुहोला
-            const scriptURL = "https://script.google.com/macros/s/AKfycbxW4gbLI3qlKxiXiQL4em86IQjDSYz1ihnBXpTlmgddDIM4-vj4YNpnzYmevlJmYxuXKw/exec";
-
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(() => {
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('gateForm').reset();
-                document.getElementById('nepaliDate').value = getAutomaticNepaliDate();
-                
-                setTimeout(() => {
-                    document.getElementById('successMessage').style.display = 'none';
-                }, 3000);
-            })
-            .catch(error => {
-                console.error('Error!', error.message);
-                alert("डाटा सेभ गर्न समस्या भयो!");
-            });
         }
+    }
 
-        function cleanExpiredPasses() {
-            const now = Date.now();
-            const twelveHours = 12 * 60 * 60 * 1000; 
-            
-            const initialLength = activePasses.length;
-            activePasses = activePasses.filter(pass => (now - pass.timestamp) < twelveHours);
-            
-            if (activePasses.length !== initialLength) {
-                renderUI();
+    function renderUI() {
+        const tableBody = document.getElementById('logsTable');
+        tableBody.innerHTML = '';
+
+        activePasses.forEach(pass => {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="checkbox" class="pass-checkbox" value="${pass.id}"></td>
+                <td>${pass.code}</td>
+                <td>${pass.rankName}</td>
+                <td>${pass.time}</td>
+                <td>${pass.returnDate}</td>
+                <td>${pass.destination}</td>
+                <td>
+                    <button class="action-btn">प्रिन्ट</button>
+                </td>
+            `;
+
+            newRow.querySelector('.action-btn').addEventListener('click', () => {
+                printSinglePass(pass);
+            });
+
+            tableBody.appendChild(newRow);
+        });
+
+        const counts = {
+            "प्रनाउ": 0, "प्रनि": 0, "प्रवनानि": 0, "प्रनानि": 0, "प्रसनि": 0,
+            "प्रबह": 0, "प्रह": 0, "प्रसह": 0, "प्रज": 0, "प्रकास": 0, "अन्य": 0
+        };
+
+        let total = 0;
+
+        activePasses.forEach(pass => {
+            if (counts.hasOwnProperty(pass.rank)) {
+                counts[pass.rank]++;
+            } else {
+                counts["अन्य"]++;
             }
+            total++;
+        });
+
+        for (let rank in counts) {
+            const el = document.getElementById(`cnt_${rank}`);
+            if (el) el.innerText = counts[rank];
         }
-
-        function renderUI() {
-            const tableBody = document.getElementById('logsTable');
-            tableBody.innerHTML = '';
-
-            activePasses.activePasses = activePasses || [];
-            activePasses.forEach(pass => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td><input type="checkbox" class="pass-checkbox" value="${pass.id}"></td>
-                    <td>${pass.code}</td>
-                    <td>${pass.rankName}</td>
-                    <td>${pass.time}</td>
-                    <td>${pass.returnDate}</td>
-                    <td>${pass.destination}</td>
-                    <td>
-                        <button class="action-btn">प्रिन्ट</button>
-                    </td>
-                `;
-
-                newRow.querySelector('.action-btn').addEventListener('click', () => {
-                    printSinglePass(pass);
-                });
-
-                tableBody.appendChild(newRow);
-            });
-
-            const counts = {
-                "प्रनाउ": 0, "प्रनि": 0, "प्रवनानि": 0, "प्रनानि": 0, "प्रसनि": 0,
-                "प्रबह": 0, "प्रह": 0, "प्रसह": 0, "प्रज": 0, "प्रकास": 0, "अन्य": 0
-            };
-
-            let total = 0;
-
-            activePasses.forEach(pass => {
-                if (counts.hasOwnProperty(pass.rank)) {
-                    counts[pass.rank]++;
-                } else {
-                    counts["अन्य"]++;
-                }
-                total++;
-            });
-
-            for (let rank in counts) {
-                const el = document.getElementById(`cnt_${rank}`);
-                if (el) el.innerText = counts[rank];
-            }
-            document.getElementById('cnt_total').innerText = total;
-        }
-    </script>
-</body>
-</html>
+        document.getElementById('cnt_total').innerText = total;
+    }
+</script>
