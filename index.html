@@ -1057,6 +1057,26 @@
         const timestamp = Date.now(); 
 
         const passData = { id: timestamp, code, rank, rankName, date, time, returnDate, destination, timestamp };
+        
+        // --- गुगल सिटमा डाटा पठाउने कोड ---
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw2WsBOWpMvTGMnq6fFVzb5yk4YMK0JZVIAUZ9GnEUpBbsdX-Ud1hRCzuBQt1D7ROB3wQ/exec';
+        
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                code: code,
+                rank: rank,
+                name: name,
+                date: date,
+                time: time,
+                returnDate: returnDate,
+                destination: destination
+            })
+        }).catch(error => console.error('Error!', error.message));
+        // ------------------------------
+
         activePasses.unshift(passData);
 
         renderUI();
