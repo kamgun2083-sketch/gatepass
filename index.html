@@ -881,26 +881,75 @@
         });
     }
 
-    function getAutomaticNepaliDate() {
-        const now = new Date();
-        let bsYear = 2083;
-        let bsMonth = 4; 
-        let bsDay = 16;  
+    // ==== वि.सं. (नेपाली) मिति: प्रत्येक महिनाको वास्तविक दिन सङ्ख्या अनुसार ====
+    // आधार मिति: वि.सं. २०८३ बैशाख १ गते = ई.सं. २०२६-०४-१४
+    const BS_BASE_YEAR = 2083;
+    const BS_BASE_AD_UTC = Date.UTC(2026, 3, 14);
+    const BS_MONTH_NAMES = ["बैशाख", "जेष्ठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन",
+                            "कार्तिक", "मंसिर", "पौष", "माघ", "फाल्गुन", "चैत्र"];
+    // प्रत्येक वर्षका १२ महिनाको दिन सङ्ख्या (बैशाख देखि चैत्र)
+    const BS_YEAR_DATA = {
+        2083: [31,31,32,31,31,31,30,29,30,29,30,30],
+        2084: [31,31,32,31,31,30,30,30,29,30,30,30],
+        2085: [31,32,31,32,30,31,30,30,29,30,30,30],
+        2086: [30,32,31,32,31,30,30,30,29,30,30,30],
+        2087: [31,31,32,31,31,31,30,29,30,30,30,30],
+        2088: [30,31,32,32,30,31,30,30,29,30,30,30],
+        2089: [30,32,31,32,31,30,30,30,29,30,30,30],
+        2090: [30,32,31,32,31,30,30,30,29,30,30,30],
+        2091: [31,31,32,31,31,31,30,30,29,30,30,30],
+        2092: [30,31,32,32,31,30,30,30,29,30,30,30],
+        2093: [30,32,31,32,31,30,30,30,29,30,30,30],
+        2094: [31,31,32,31,31,30,30,30,29,30,30,30],
+        2095: [31,31,32,31,31,31,30,29,30,30,30,30],
+        2096: [30,31,32,32,31,30,30,29,30,29,30,30],
+        2097: [31,32,31,32,31,30,30,30,29,30,30,30],
+        2098: [31,31,32,31,31,31,29,30,29,30,29,31],
+        2099: [31,31,32,31,31,31,30,29,29,30,30,30],
+        2100: [31,32,31,32,30,31,30,29,30,29,30,30]
+    };
 
-        const targetAD = new Date(2026, 7, 1); 
-        const diffTime = now.getTime() - targetAD.getTime();
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-        let baseShrawanDays = 16 + diffDays;
-        
-        if (baseShrawanDays > 31) {
-            baseShrawanDays -= 31;
-            bsMonth = 5; 
+    // आजको (नेपाल समय अनुसार) नेपाली मिति: {year, month(१-१२), day} फर्काउँछ
+    function getNepaliDateParts() {
+        // नेपालको समय (Asia/Kathmandu) अनुसार आजको अंग्रेजी मिति
+        let y, m, d;
+        try {
+            const parts = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Kathmandu', year: 'numeric', month: '2-digit', day: '2-digit'
+            }).formatToParts(new Date());
+            y = parseInt(parts.find(p => p.type === 'year').value, 10);
+            m = parseInt(parts.find(p => p.type === 'month').value, 10);
+            d = parseInt(parts.find(p => p.type === 'day').value, 10);
+        } catch (e) {
+            const n = new Date();
+            y = n.getFullYear(); m = n.getMonth() + 1; d = n.getDate();
         }
 
-        let nepaliYearStr = convertToNepaliNumber(bsYear);
-        let nepaliDayStr = convertToNepaliNumber(baseShrawanDays);
-        let monthName = (bsMonth === 4) ? "श्रावण" : "भाद्र";
+        let daysLeft = Math.round((Date.UTC(y, m - 1, d) - BS_BASE_AD_UTC) / 86400000);
+        if (daysLeft < 0) return null;
+
+        for (let year = BS_BASE_YEAR; BS_YEAR_DATA[year]; year++) {
+            const months = BS_YEAR_DATA[year];
+            for (let mi = 0; mi < 12; mi++) {
+                if (daysLeft < months[mi]) {
+                    return { year: year, month: mi + 1, day: daysLeft + 1 };
+                }
+                daysLeft -= months[mi];
+            }
+        }
+        return null; // तालिकाको दायराभन्दा बाहिर
+    }
+
+    function getAutomaticNepaliDate() {
+        const bs = getNepaliDateParts();
+        if (!bs) {
+            // दायरा बाहिर भए अंग्रेजी मिति देखाउने (फारम खाली नरहोस् भनेर)
+            const n = new Date();
+            return convertToNepaliNumber(`${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`) + ' (ई.सं.)';
+        }
+        const nepaliYearStr = convertToNepaliNumber(bs.year);
+        const nepaliDayStr = convertToNepaliNumber(bs.day);
+        const monthName = BS_MONTH_NAMES[bs.month - 1];
 
         return `${nepaliYearStr} साल ${monthName} ${nepaliDayStr} गते`;
     }
@@ -1019,18 +1068,10 @@
                 const retMonth = parseInt(match[2]);
                 const retDay = parseInt(match[3]);
 
-                const now = new Date();
-                const targetAD = new Date(2026, 7, 1);
-                const diffTime = now.getTime() - targetAD.getTime();
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                let depDay = 16 + diffDays;
-                let depMonth = 4;
-                let depYear = 2083;
-
-                if (depDay > 31) {
-                    depDay -= 31;
-                    depMonth = 5;
-                }
+                const todayBS = getNepaliDateParts() || { year: 2083, month: 1, day: 1 };
+                let depDay = todayBS.day;
+                let depMonth = todayBS.month;
+                let depYear = todayBS.year;
 
                 let isBefore = false;
                 if (retYear < depYear) {
